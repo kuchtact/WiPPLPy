@@ -9,3 +9,6 @@ requires = [
 [project]
 name = "wipplpy"
 description = "Python package for the Wisconsin Plasma Physics Laboratory"
+dynamic = [
+  "version",
+]
