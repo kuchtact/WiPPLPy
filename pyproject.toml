@@ -1,0 +1,11 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools >= 61.2.0",
+  "setuptools-scm >= 6.3.2",
+  "wheel >= 0.37.0",
+]
+
+[project]
+name = "wipplpy"
+description = "Python package for the Wisconsin Plasma Physics Laboratory"
