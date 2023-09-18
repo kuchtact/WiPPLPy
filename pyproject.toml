@@ -5,10 +5,18 @@ requires = [
   "setuptools-scm >= 6.3.2",
   "wheel >= 0.37.0",
 ]
-
 [project]
 name = "wipplpy"
 description = "Python package for the Wisconsin Plasma Physics Laboratory"
 dynamic = [
   "version",
+]
+requires-python = ">=3.9"
+dependencies = [
+  "numpy >= 1.22.0",
+]
+[project.optional-dependencies]
+tests = [
+  "pytest >= 7.0.0",
+  "tox >= 4.3.1",
 ]
