@@ -372,9 +372,7 @@ class Data:
                 variable_values.append(value)
             else:
                 logging.debug(
-                    "Skipping get call since boolean is False: '{}'".format(
-                        get_calls[i]
-                    )
+                    f"Skipping get call since boolean is False: '{get_calls[i]}'"
                 )
                 variable_values.append(None)
 
@@ -425,9 +423,7 @@ class Data:
                         raise
             else:
                 logging.debug(
-                    "Skipping assignment since false boolean from call: {}".format(
-                        get_calls[i]
-                    )
+                    f"Skipping assignment since false boolean from call: {get_calls[i]}"
                 )
                 variable_vals.append(None)
         return variable_vals
@@ -598,9 +594,7 @@ class Data:
                     self.saved_calls[key] = self.loaded_mat_dict[key]
 
         logging.debug(
-            "Saving data with names '{}' to file '{}'.".format(
-                self.saved_calls.keys(), filepath
-            )
+            f"Saving data with names '{self.saved_calls.keys()}' to file '{filepath}'."
         )
         savemat(filepath, self.saved_calls)
 
