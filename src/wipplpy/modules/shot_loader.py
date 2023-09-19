@@ -60,7 +60,7 @@ def get_connector(server_name, reconnect=False):
         )
     )
     _mds_connection = mds.Connection(server_name)
-    logging.info("Connected to {server}.".format(server=server_name))
+    logging.info(f"Connected to {server_name}.")
     return _mds_connection
 
 
@@ -95,18 +95,14 @@ def get_remote_shot_tree(
     """
     if server_name is None or tree_name is None:
         try:
-            with open(load_config_path, "r") as config_file:
-                logging.debug(
-                    "Successfully opened '{path}'.".format(path=load_config_path)
-                )
+            with open(load_config_path) as config_file:
+                logging.debug(f"Successfully opened '{load_config_path}'.")
                 config = json.load(config_file)
         except (
-            IOError
+            OSError
         ):  # TODO: Change this to FileNotFoundError once code moved to python3.
             logging.error(
-                "Could not find shot_loading config file at '{path}'.".format(
-                    path=load_config_path
-                )
+                f"Could not find shot_loading config file at '{load_config_path}'."
             )
             raise
 
@@ -135,9 +131,7 @@ def get_remote_shot_tree(
     connection = get_connector(server_name, reconnect)
 
     logging.debug(
-        "Getting shot {shot} on tree {tree} on server {server}.".format(
-            shot=shot_number, tree=tree_name, server=server_name
-        )
+        f"Getting shot {shot_number} on tree {tree_name} on server {server_name}."
     )
     try:
         connection.openTree(tree_name, shot_number)
@@ -153,9 +147,7 @@ def get_remote_shot_tree(
             )
             raise
     except MDSplusException:
-        logging.exception(
-            "Error opening shot #{} on tree '{}'.".format(shot_number, tree_name)
-        )
+        logging.exception(f"Error opening shot #{shot_number} on tree '{tree_name}'.")
         raise
 
     # Set a tree name and shot number attribute to make getting these values easy.
@@ -165,7 +157,7 @@ def get_remote_shot_tree(
     else:
         connection.shot_number = shot_number
 
-    logging.info("Opened shot {} tree.".format(shot_number))
+    logging.info(f"Opened shot {shot_number} tree.")
     _global_tree = connection
     return _global_tree
 
