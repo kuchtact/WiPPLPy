@@ -1,5 +1,5 @@
-Welcome to WiPPLPy's documentation!
-===================================
+WiPPLPy
+=======
 
 .. toctree::
    :maxdepth: 2
