@@ -216,7 +216,7 @@ class Data:
         # If the tree is really a shot number then delay getting the tree until it's needed.
         try:
             self.shot_number = int(tree)
-        except:
+        except ValueError:
             self.shot_number = tree.shot_number
 
         self.ignore_errors = ignore_errors
