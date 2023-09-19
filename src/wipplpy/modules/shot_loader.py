@@ -7,8 +7,8 @@ import MDSplus as mds
 from MDSplus.mdsExceptions import MDSplusException, SsSUCCESS
 
 # TODO: Add MySQL Connection object.
-mds_connection = None
-global_tree = None
+_mds_connection = None
+_global_tree = None
 
 
 def get_connector(server_name, reconnect=False):
@@ -27,11 +27,11 @@ def get_connector(server_name, reconnect=False):
     mds.Connection
         Connection to the server without a tree connection.
     """
-    global mds_connection
+    global _mds_connection
     if reconnect:
         logging.debug("Forcing reconnection to server.")
         try:
-            mds_connection.closeAllTrees()
+            _mds_connection.closeAllTrees()
         except Exception as e:
             logging.debug(
                 "Tried to close all trees from old connection. Exception occurred but ignoring. Exception was:\n{}".format(
@@ -39,18 +39,18 @@ def get_connector(server_name, reconnect=False):
                 )
             )
 
-    elif isinstance(mds_connection, mds.Connection):
-        if mds_connection.hostspec == server_name:
+    elif isinstance(_mds_connection, mds.Connection):
+        if _mds_connection.hostspec == server_name:
             logging.info(
                 "Found pre-existing connector that is connected to {host}. Using this connector since same as {server}.".format(
-                    host=mds_connection.hostspec, server=server_name
+                    host=_mds_connection.hostspec, server=server_name
                 )
             )
-            return mds_connection
+            return _mds_connection
         else:
             logging.info(
                 "Found pre-existing connector that is connected to {host}. This is not the same as {server} so making new connection.".format(
-                    host=mds_connection.hostspec, server=server_name
+                    host=_mds_connection.hostspec, server=server_name
                 )
             )
 
@@ -59,9 +59,9 @@ def get_connector(server_name, reconnect=False):
             server_name
         )
     )
-    mds_connection = mds.Connection(server_name)
+    _mds_connection = mds.Connection(server_name)
     logging.info("Connected to {server}.".format(server=server_name))
-    return mds_connection
+    return _mds_connection
 
 
 def get_remote_shot_tree(
@@ -116,17 +116,17 @@ def get_remote_shot_tree(
     if tree_name is None:
         tree_name = config["tree_name"]
 
-    global global_tree
-    if isinstance(global_tree, mds.Connection) and not reconnect:
+    global _global_tree
+    if isinstance(_global_tree, mds.Connection) and not reconnect:
         if (
-            global_tree.hostspec == server_name
-            and global_tree.tree_name == tree_name
-            and global_tree.shot_number == shot_number
+            _global_tree.hostspec == server_name
+            and _global_tree.tree_name == tree_name
+            and _global_tree.shot_number == shot_number
         ):
             logging.debug(
                 "Found pre-existing global tree for this server, tree, shot combination. Using that."
             )
-            return global_tree
+            return _global_tree
         else:
             logging.debug(
                 "Found pre-existing tree with different server and/or tree and/or shot number. Getting new tree."
@@ -166,8 +166,8 @@ def get_remote_shot_tree(
         connection.shot_number = shot_number
 
     logging.info("Opened shot {} tree.".format(shot_number))
-    global_tree = connection
-    return global_tree
+    _global_tree = connection
+    return _global_tree
 
 
 def most_recent_shot():
