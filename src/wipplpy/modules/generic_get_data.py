@@ -29,10 +29,8 @@ def lazy_get(function):
         except (SyntaxError, AttributeError):
             return result
     
-    # TODO: Add setting property.
     @_lazy_get.setter
     def _lazy_get(self, value):
-        # raise AttributeError("This property, `{}`, is read-only.".format(function.__name__))
         setattr(self, attribute_name, value)
 
     @_lazy_get.deleter
