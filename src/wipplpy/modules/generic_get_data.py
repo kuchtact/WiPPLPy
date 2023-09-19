@@ -273,7 +273,7 @@ class Data:
 
         variable_vals = self._get_individuals(variable_booleans, get_calls)
 
-        return variable_vals
+        return variable_vals  # noqa: PLE0101
 
     def _get_my_tree(self):
         if self._tree is None or self._tree.shot_number != self.shot_number:
