@@ -432,7 +432,7 @@ class Data:
                 variable_vals.append(None)
         return variable_vals
 
-    def get(
+    def get(  # noqa: PLR0912, PLR0915
         self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True
     ):
         """
