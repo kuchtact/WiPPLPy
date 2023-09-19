@@ -1,16 +1,18 @@
 import logging
-import numpy as np
-from MDSplus.connection import MdsIpException, Connection
-from MDSplus.mdsExceptions import SsSUCCESS, MDSplusException
-from scipy.io import savemat, loadmat
 import re
+
+import numpy as np
+from MDSplus.connection import Connection, MdsIpException
+from MDSplus.mdsExceptions import MDSplusException, SsSUCCESS
 from modules.shot_loader import get_remote_shot_tree
+from scipy.io import loadmat, savemat
+
 
 # This lazy get property is taken from https://towardsdatascience.com/what-is-lazy-evaluation-in-python-9efb1d3bfed0
 def lazy_get(function):
     """
     Change a function to be used like an attribute and give it the ability to only load when called.
-    
+
     Parameters
     ----------
     function : function
@@ -28,23 +30,28 @@ def lazy_get(function):
             return result.copy()
         except (SyntaxError, AttributeError):
             return result
-    
+
     @_lazy_get.setter
     def _lazy_get(self, value):
         setattr(self, attribute_name, value)
 
     @_lazy_get.deleter
     def _lazy_get(self):
-        logging.debug("Deleting `{}` by setting `{}` of `{}` to `None`.".format(function.__name__, attribute_name, self))
+        logging.debug(
+            "Deleting `{}` by setting `{}` of `{}` to `None`.".format(
+                function.__name__, attribute_name, self
+            )
+        )
         setattr(self, attribute_name, None)
 
     return _lazy_get
+
 
 class Get:
     def __init__(self, call_string, name=None, signal=True):
         """
         Class for holding get calls and certain info about the call.
-        
+
         Parameters
         ----------
         call_string : str
@@ -63,14 +70,14 @@ class Get:
 
     def __str__(self) -> str:
         if self.signal:
-            return "Get({}, is_signal)".format(self.call_string)
+            return f"Get({self.call_string}, is_signal)"
         else:
-            return "Get({})".format(self.call_string)
-    
+            return f"Get({self.call_string})"
+
     def full_str(self, index_range=None, sample_period=1):
         """
         Get the full call string to send to MDSplus.
-        
+
         Parameters
         ----------
         index_range : tuple[int] or None, default=None
@@ -84,13 +91,22 @@ class Get:
         if self.signal:
             if index_range is not None:
                 if sample_period != 1:
-                    return 'DATA( {call} )[{start} : {end} : {step}]'.format(call=self.call_string, start=index_range[0], end=index_range[1], step=sample_period)
+                    return "DATA( {call} )[{start} : {end} : {step}]".format(
+                        call=self.call_string,
+                        start=index_range[0],
+                        end=index_range[1],
+                        step=sample_period,
+                    )
                 else:
-                    return 'DATA( {call} )[{start} : {end}]'.format(call=self.call_string, start=index_range[0], end=index_range[1])
+                    return "DATA( {call} )[{start} : {end}]".format(
+                        call=self.call_string, start=index_range[0], end=index_range[1]
+                    )
             elif sample_period != 1:
-                return 'DATA( {call} )[0 : shape( {call} )[0] : {step}]'.format(call=self.call_string, step=sample_period)
+                return "DATA( {call} )[0 : shape( {call} )[0] : {step}]".format(
+                    call=self.call_string, step=sample_period
+                )
             else:
-                return 'DATA( {call} )'.format(call=self.call_string)
+                return f"DATA( {self.call_string} )"
         else:
             return self.call_string
 
@@ -111,14 +127,16 @@ class Get:
         """
         # Convert the string into a valid variable name for matlab.
         # Keep only alphanumerics and underscores by using a regex call.
-        cleaned_string = re.sub('[^0-9a-zA-Z_]', '', call_string)
+        cleaned_string = re.sub("[^0-9a-zA-Z_]", "", call_string)
         # Remove all digits at the start of the string.
         while len(cleaned_string) != 0 and cleaned_string[0].isdigit():
             cleaned_string = cleaned_string[1:]
         # If we have removed all characters from the string then log a warning.
         if len(cleaned_string) == 0:
-            logging.warning("Length of string after cleaning for get call name is now zero. Setting call name as 'invalid_matlab_name'.")
-            cleaned_string = 'invalid_matlab_string'
+            logging.warning(
+                "Length of string after cleaning for get call name is now zero. Setting call name as 'invalid_matlab_name'."
+            )
+            cleaned_string = "invalid_matlab_string"
 
         return cleaned_string[:31]
 
@@ -137,14 +155,28 @@ class Data:
             return tree_or_shot_number
         else:
             int_shot_number = int(tree_or_shot_number)
-            logging.debug("Shot number {} (int {}) passed when creating data object. Getting tree connection.".format(tree_or_shot_number, int_shot_number))
+            logging.debug(
+                "Shot number {} (int {}) passed when creating data object. Getting tree connection.".format(
+                    tree_or_shot_number, int_shot_number
+                )
+            )
             return get_remote_shot_tree(int_shot_number)
 
-    def __init__(self, tree, variable_booleans: iter, get_calls: iter, ignore_errors=False, silence_error_logging=False, 
-                 time_index_range=None, time_range=None, sample_period=1, load_filepath=None):
+    def __init__(
+        self,
+        tree,
+        variable_booleans: iter,
+        get_calls: iter,
+        ignore_errors=False,
+        silence_error_logging=False,
+        time_index_range=None,
+        time_range=None,
+        sample_period=1,
+        load_filepath=None,
+    ):
         """
         Generic class for dealing with data from a remote MDSplus database.
-        
+
         Parameters
         ----------
         tree : Connection or int
@@ -163,7 +195,7 @@ class Data:
             Downsampling rate of signal to use when doing call. The default is 1 which means no downsampling.
         load_filepath : None or str, default=None
             Filepath to try to load data from instead of doing MDSplus calls. If None, don't try to load data from a file.
-        
+
         Returns
         -------
         variable_vals : list
@@ -173,7 +205,7 @@ class Data:
         ----------
         shot_number : int
             The shot number this Data is from.
-        
+
 
         Methods
         -------
@@ -202,7 +234,11 @@ class Data:
             del self.time
 
         if len(variable_booleans) != len(get_calls):
-            raise ValueError("variable_booleans and get_calls do not have the same number of elements ({} and {} respectively).".format(len(variable_booleans), len(get_calls)))
+            raise ValueError(
+                "variable_booleans and get_calls do not have the same number of elements ({} and {} respectively).".format(
+                    len(variable_booleans), len(get_calls)
+                )
+            )
         elif len(get_calls) == 0:
             logging.info("Did not do any get calls for preloading data into object.")
 
@@ -212,13 +248,25 @@ class Data:
         # Hold the loaded mat file.
         self.load_filepath = load_filepath
         if load_filepath is not None:
-            logging.debug("Loading .mat file at path '{}' to be used when loading data.".format(load_filepath))
+            logging.debug(
+                "Loading .mat file at path '{}' to be used when loading data.".format(
+                    load_filepath
+                )
+            )
             # Load the matrix and reduce matrix dimension as much as possible.
             try:
                 self.loaded_mat_dict = loadmat(load_filepath, squeeze_me=True)
-                logging.info("Loaded file '{}' has the following keys:\n{}".format(load_filepath, self.loaded_mat_dict.keys()))
+                logging.info(
+                    "Loaded file '{}' has the following keys:\n{}".format(
+                        load_filepath, self.loaded_mat_dict.keys()
+                    )
+                )
             except FileNotFoundError:
-                logging.warning("Could not load file '{}' as it does not yet exist. Will call data from database instead.".format(load_filepath))
+                logging.warning(
+                    "Could not load file '{}' as it does not yet exist. Will call data from database instead.".format(
+                        load_filepath
+                    )
+                )
                 self.loaded_mat_dict = None
         else:
             self.loaded_mat_dict = None
@@ -232,7 +280,7 @@ class Data:
             self._tree = self._get_tree(self.shot_number)
             self.shot_number = self._tree.shot_number
         return self._tree
-    
+
     def _set_my_tree(self, new_tree):
         self._tree = new_tree
         self.shot_number = new_tree.shot_number
@@ -247,18 +295,29 @@ class Data:
         ----------
         time_range : tuple of two floats
             Times in seconds from experiment start.
-        
+
         Returns
         -------
         index_range : tuple of two ints
-            Indeces from start of digitizer recording.
+            Indices from start of digitizer recording.
         """
-        index_range = (self._to_time_index(time_range[0]), self._to_time_index(time_range[1]))
+        index_range = (
+            self._to_time_index(time_range[0]),
+            self._to_time_index(time_range[1]),
+        )
         if index_range[0] >= index_range[1]:
-            logging.error("Time range {} was not in the possible data times ({start}, {end}).".format(time_range, start=self.time[0], end=self.time[-1]))
+            logging.error(
+                "Time range {} was not in the possible data times ({start}, {end}).".format(
+                    time_range, start=self.time[0], end=self.time[-1]
+                )
+            )
             raise ValueError("Invalid time range {} since no data falls in range.")
 
-        logging.debug("Changed time range {} to index range {} for indexing signal data.".format(time_range, index_range))
+        logging.debug(
+            "Changed time range {} to index range {} for indexing signal data.".format(
+                time_range, index_range
+            )
+        )
         return index_range
 
     def _to_time_index(self, time):
@@ -278,7 +337,9 @@ class Data:
         try:
             times = self.time
         except AttributeError:
-            logging.error("Object has no 'time' attribute so can't figure out how to change time range to index range for data.")
+            logging.error(
+                "Object has no 'time' attribute so can't figure out how to change time range to index range for data."
+            )
             raise
 
         if time < times[0]:
@@ -310,7 +371,11 @@ class Data:
                 value = self.get(get_calls[i])
                 variable_values.append(value)
             else:
-                logging.debug("Skipping get call since boolean is False: '{}'".format(get_calls[i]))
+                logging.debug(
+                    "Skipping get call since boolean is False: '{}'".format(
+                        get_calls[i]
+                    )
+                )
                 variable_values.append(None)
 
         return variable_values
@@ -320,14 +385,14 @@ class Data:
         # TODO: Add signal handling.
         # TODO: Add call saving.
         # TODO: Add SsSUCCESS error handling.
-        logging.debug("Constructing GetMany instance using get calls:\n{}".format(get_calls))
+        logging.debug(f"Constructing GetMany instance using get calls:\n{get_calls}")
         getmany_instance = tree.getMany()
         getmany_keys = []
         # Append instructions to instance.
         for i, call in enumerate(get_calls):
-            key = '{}: {}'.format(i, call)
+            key = f"{i}: {call}"
             getmany_keys.append(key)
-            
+
             if variable_booleans[i]:
                 getmany_instance.append(key, call)
         # Execute all the calls.
@@ -335,29 +400,41 @@ class Data:
         result = getmany_instance.execute()
 
         # Populate the variable list.
-        logging.debug("Assiging variable values.")
+        logging.debug("Assigning variable values.")
         variable_vals = []
         for i in range(len(variable_booleans)):
             if variable_booleans[i]:
                 call = get_calls[i]
                 key = getmany_keys[i]
-                logging.debug("Assigning from call: {}".format(call))
+                logging.debug(f"Assigning from call: {call}")
                 try:
-                    variable_vals.append(result[key]['value'].value)
+                    variable_vals.append(result[key]["value"].value)
                 except KeyError:
                     if not self.silence_error_logging:
-                        if 'error' in result[key].keys():
-                            logging.error("Error getting from tree using get call '{}'. Error was:\n{}".format(get_calls[i], result[key]['error']))
+                        if "error" in result[key]:
+                            logging.error(
+                                "Error getting from tree using get call '{}'. Error was:\n{}".format(
+                                    get_calls[i], result[key]["error"]
+                                )
+                            )
                         else:
-                            logging.error("No error returned from call but could not find 'value' key in call result.")
+                            logging.error(
+                                "No error returned from call but could not find 'value' key in call result."
+                            )
                     if not self.ignore_errors:
                         raise
             else:
-                logging.debug("Skipping assignment since false boolean from call: {}".format(get_calls[i]))
+                logging.debug(
+                    "Skipping assignment since false boolean from call: {}".format(
+                        get_calls[i]
+                    )
+                )
                 variable_vals.append(None)
         return variable_vals
 
-    def get(self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True):
+    def get(
+        self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True
+    ):
         """
         Get data from the mdsplus tree and change it to the correct type using a get call.
 
@@ -377,7 +454,7 @@ class Data:
         data : `np_data_type` or MDSplus data-type
             The data from the tree.
         """
-        logging.debug("Trying to get data using `{}`.".format(get_call))
+        logging.debug(f"Trying to get data using `{get_call}`.")
         if isinstance(get_call, Get):
             call_string = get_call.full_str(self.time_index_range, self.sample_period)
             save_name = get_call.to_matlab_name(call_string)
@@ -386,13 +463,21 @@ class Data:
             call_string = get_call
             save_name = Get.to_matlab_name(call_string)
 
-        if load_from_saved and hasattr(self, 'saved_calls'):
-            if save_name in self.saved_calls.keys():
-                logging.debug("Loading '{}' from saved calls instead of making new call.".format(save_name))
+        if load_from_saved and hasattr(self, "saved_calls"):
+            if save_name in self.saved_calls:
+                logging.debug(
+                    "Loading '{}' from saved calls instead of making new call.".format(
+                        save_name
+                    )
+                )
                 return self.saved_calls[save_name]
 
-            if self.loaded_mat_dict is not None and save_name in self.loaded_mat_dict.keys():
-                logging.debug("Loading '{}' from loaded mat file instead of making new call.".format(save_name))
+            if self.loaded_mat_dict is not None and save_name in self.loaded_mat_dict:
+                logging.debug(
+                    "Loading '{}' from loaded mat file instead of making new call.".format(
+                        save_name
+                    )
+                )
                 self.saved_calls[save_name] = self.loaded_mat_dict[save_name]
                 return self.loaded_mat_dict[save_name]
 
@@ -408,25 +493,39 @@ class Data:
         while try_loading:
             try_loading = False
             num_tries += 1
-            logging.debug("Getting data from database using '{call}'.".format(call=call_string))
+            logging.debug(f"Getting data from database using '{call_string}'.")
             try:
                 node = self.tree.get(call_string)
-            except MdsIpException as e:
+            except MdsIpException:
                 if not self.silence_error_logging:
-                    logging.exception("Shot #{}: Error getting data from node using get call '{}'. No data available.".format(self.shot_number, call_string))
+                    logging.exception(
+                        "Shot #{}: Error getting data from node using get call '{}'. No data available.".format(
+                            self.shot_number, call_string
+                        )
+                    )
                 if not self.ignore_errors:
-                    logging.exception("Shot #{}: Error getting data from node using get call '{}'. No data available.".format(self.shot_number, call_string))
+                    logging.exception(
+                        "Shot #{}: Error getting data from node using get call '{}'. No data available.".format(
+                            self.shot_number, call_string
+                        )
+                    )
                     raise
             except SsSUCCESS:
                 # Sometimes mdsplus raises a 'SsSUCCESS' exception. This may be because the connection object is bad. Thus we need to create a new connection object.
                 if num_tries > max_tries:
-                    logging.exception("Shot #{}: Error getting data from node using get call '{}'. Exceeded number of attempts ({}). Error was due to 'SsSUCCESS'.".format(self.shot_number, call_string, max_tries))
+                    logging.exception(
+                        "Shot #{}: Error getting data from node using get call '{}'. Exceeded number of attempts ({}). Error was due to 'SsSUCCESS'.".format(
+                            self.shot_number, call_string, max_tries
+                        )
+                    )
                     raise
                 else:
-                    logging.info("Silencing 'SsSUCCESS' error that MDSplus raised. Reconnecting to server.")
+                    logging.info(
+                        "Silencing 'SsSUCCESS' error that MDSplus raised. Reconnecting to server."
+                    )
                     try_loading = True
                     self.tree = get_remote_shot_tree(self.shot_number, reconnect=True)
-        
+
         if self.ignore_errors:
             try:
                 data = node.data()
@@ -438,32 +537,34 @@ class Data:
         logging.debug("Got data from tree.")
         if change_data:
             data = data.astype(np_data_type)
-            logging.debug("Changed data to type '{}'.".format(np_data_type))
+            logging.debug(f"Changed data to type '{np_data_type}'.")
 
         # Only save calls if the dictionary exists. The dictionary doesn't exist during some stages of initialization so that we don't save incorrect data.
-        if hasattr(self, 'saved_calls'):
+        if hasattr(self, "saved_calls"):
             # logging.debug("Adding data from get call with `save_name='{}'` into `saved_calls`.".format(save_name))
-            if save_name in self.saved_calls.keys():
-                logging.warning("Save name ({}) is the same as a save name already in the data to save dictionary. Overwriting old data.")
+            if save_name in self.saved_calls:
+                logging.warning(
+                    "Save name ({}) is the same as a save name already in the data to save dictionary. Overwriting old data."
+                )
             self.saved_calls[save_name] = data
 
         return data
-    
+
     def to_raw_index(self, time_index):
         """
         Convert an index that works for the entire time range and change it to work for this objects arrays.
-        
+
         Parameters
         ----------
         time_index : int or np.array[int]
-            Index of array in time where `time_index = 0` refers to the very 
+            Index of array in time where `time_index = 0` refers to the very
             first data point for the signals.
-        
+
         Returns
         -------
         raw_index : int
-            Index of array in time where `raw_index = 0` refers to the very 
-            first data point for this objects signals which may be different 
+            Index of array in time where `raw_index = 0` refers to the very
+            first data point for this objects signals which may be different
             due to the `time_index_range` of this object.
         """
         if self.time_index_range is not None:
@@ -474,7 +575,7 @@ class Data:
     def save(self, filepath):
         """
         Save data currently called from MDSplus as a '.mat' file that this object got.
-        
+
         Parameters
         ----------
         filepath : str
@@ -484,15 +585,23 @@ class Data:
         -----
         This also saves all data from a previously loaded `.mat` file if one was associated with this object.
         """
-        if filepath.strip()[-4:] != '.mat':
-            logging.warning("Saving calls to file {} but this file has no '.mat' extension.".format(filepath))
+        if filepath.strip()[-4:] != ".mat":
+            logging.warning(
+                "Saving calls to file {} but this file has no '.mat' extension.".format(
+                    filepath
+                )
+            )
 
         if self.loaded_mat_dict is not None:
-            for key in self.loaded_mat_dict.keys():
+            for key in self.loaded_mat_dict:
                 if key not in self.saved_calls:
                     self.saved_calls[key] = self.loaded_mat_dict[key]
 
-        logging.debug("Saving data with names '{}' to file '{}'.".format(self.saved_calls.keys(), filepath))
+        logging.debug(
+            "Saving data with names '{}' to file '{}'.".format(
+                self.saved_calls.keys(), filepath
+            )
+        )
         savemat(filepath, self.saved_calls)
 
     def save_all(self, filepath):
@@ -506,22 +615,30 @@ class Data:
         """
         # Get all the items in the class. If any are of type `property` then that is a call to MDSplus most likely.
         class_items = self.__class__.__dict__.items()
-        call_functions = list(k for k, v in class_items if isinstance(v, property))
-        logging.debug("Calling functions {} before saving.".format(call_functions))
+        call_functions = [k for k, v in class_items if isinstance(v, property)]
+        logging.debug(f"Calling functions {call_functions} before saving.")
         for f in call_functions:
             try:
-                logging.debug("Calling function '{}'.".format(f))
+                logging.debug(f"Calling function '{f}'.")
                 getattr(self, f)
             except MDSplusException as e:
-                logging.warning("An MDSplus exception occured while executing '{}'. Exception was:\n{}".format(f, e))
+                logging.warning(
+                    "An MDSplus exception occurred while executing '{}'. Exception was:\n{}".format(
+                        f, e
+                    )
+                )
             except Exception as e:
-                logging.warning("A non-MDSplus exception occured while executing '{}'. Exception was:\n{}".format(f, e))
-        
+                logging.warning(
+                    "A non-MDSplus exception occurred while executing '{}'. Exception was:\n{}".format(
+                        f, e
+                    )
+                )
+
         self.save(filepath)
 
 
 class Port:
-    def __init__(self, parent_probe : Data, port_tag_prefix: str) -> None:
+    def __init__(self, parent_probe: Data, port_tag_prefix: str) -> None:
         """
         This class holds information about the port a probe is attached to.
 
@@ -562,7 +679,9 @@ class Port:
 
     @lazy_get
     def alpha_deg(self):
-        return self.parent_probe.get(Get('\\{}alpha'.format(self.port_tag_prefix), signal=False))
+        return self.parent_probe.get(
+            Get(f"\\{self.port_tag_prefix}alpha", signal=False)
+        )
 
     @lazy_get
     def alpha_rad(self):
@@ -570,7 +689,7 @@ class Port:
 
     @lazy_get
     def beta_deg(self):
-        return self.parent_probe.get(Get('\\{}beta'.format(self.port_tag_prefix), signal=False))
+        return self.parent_probe.get(Get(f"\\{self.port_tag_prefix}beta", signal=False))
 
     @lazy_get
     def beta_rad(self):
@@ -578,19 +697,23 @@ class Port:
 
     @lazy_get
     def gamma_deg(self):
-        return self.parent_probe.get(Get('\\{}gamma'.format(self.port_tag_prefix), signal=False))
+        return self.parent_probe.get(
+            Get(f"\\{self.port_tag_prefix}gamma", signal=False)
+        )
 
     @lazy_get
     def gamma_rad(self):
         return np.deg2rad(self.gamma_deg)
-    
+
     @lazy_get
     def insert(self):
-        return self.parent_probe.get(Get('\\{}insert'.format(self.port_tag_prefix), signal=False))
+        return self.parent_probe.get(
+            Get(f"\\{self.port_tag_prefix}insert", signal=False)
+        )
 
     @lazy_get
     def lat_deg(self):
-        return self.parent_probe.get(Get('\\{}lat'.format(self.port_tag_prefix), signal=False))
+        return self.parent_probe.get(Get(f"\\{self.port_tag_prefix}lat", signal=False))
 
     @lazy_get
     def lat_rad(self):
@@ -598,7 +721,7 @@ class Port:
 
     @lazy_get
     def long_deg(self):
-        return self.parent_probe.get(Get('\\{}long'.format(self.port_tag_prefix), signal=False))
+        return self.parent_probe.get(Get(f"\\{self.port_tag_prefix}long", signal=False))
 
     @lazy_get
     def long_rad(self):
@@ -606,13 +729,17 @@ class Port:
 
     @lazy_get
     def rport(self):
-        return self.parent_probe.get(Get('\\{}rport'.format(self.port_tag_prefix), signal=False))
-    
+        return self.parent_probe.get(
+            Get(f"\\{self.port_tag_prefix}rport", signal=False)
+        )
+
     @lazy_get
     def clocking_deg(self):
         # Some probes don't have a clocking value set so we assume it's zero.
         try:
-            return self.parent_probe.get(Get('\\{}clock'.format(self.port_tag_prefix), signal=False))
+            return self.parent_probe.get(
+                Get(f"\\{self.port_tag_prefix}clock", signal=False)
+            )
         except MdsIpException:
             logging.warning("Could not get clocking value. Returning clocking of 0.")
             return 0
@@ -624,5 +751,3 @@ class Port:
         except MdsIpException:
             logging.warning("Could not get clocking value. Returning clocking of 0.")
             return 0
-
-
