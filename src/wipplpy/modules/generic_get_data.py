@@ -162,7 +162,7 @@ class Data:
             )
             return get_remote_shot_tree(int_shot_number)
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         tree,
         variable_booleans: iter,
