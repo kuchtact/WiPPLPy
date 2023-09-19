@@ -24,7 +24,7 @@ tests = [
 [tool.codespell]
 skip = "*.png"
 ignore-words-list = """
-NED"""
+ned"""
 
 [tool.ruff]
 target-version = "py39"
