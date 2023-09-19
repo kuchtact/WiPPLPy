@@ -64,7 +64,7 @@ def get_connector(server_name, reconnect=False):
     return _mds_connection
 
 
-def get_remote_shot_tree(
+def get_remote_shot_tree(  # noqa: PLR0912
     shot_number,
     tree_name=None,
     server_name=None,
