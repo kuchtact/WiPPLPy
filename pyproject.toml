@@ -33,6 +33,7 @@ extend-select = [
   "PLW", # pylint warnings
   "SIM", # flake8-simplify
   "UP", # pyupgrade
+  "RUF200", # invalid-pyproject-toml
 ]
 ignore = [
   "E501", # line-too-long
