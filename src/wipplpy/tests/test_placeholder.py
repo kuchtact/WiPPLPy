@@ -2,4 +2,4 @@
 
 
 def test_importing_wipplpy():
-    import wipplpy
+    import wipplpy  # noqa: F401
