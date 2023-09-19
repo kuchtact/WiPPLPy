@@ -51,4 +51,23 @@ ignore = [
 [tool.codespell]
 skip = "*.png"
 ignore-words-list = """
-NED"""
+ned"""
+
+[tool.ruff]
+target-version = "py39"
+extend-select = [
+  "A", # flake8-builtins
+  "C4", # flake8-comprehensions
+  "FBT003", # flake8-boolean-trap
+  "ISC", # flake8-implicit-str-concat
+  "PLC", # pylint convention
+  "PLE", # pylint errors
+  "PLR", # pylint refactorings
+  "PLW", # pylint warnings
+  "SIM", # flake8-simplify
+  "UP", # pyupgrade
+  "RUF200", # invalid-pyproject-toml
+]
+ignore = [
+  "E501", # line-too-long
+]
