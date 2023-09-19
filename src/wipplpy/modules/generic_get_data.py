@@ -320,7 +320,7 @@ class Data:
         # TODO: Add signal handling.
         # TODO: Add call saving.
         # TODO: Add SsSUCCESS error handling.
-        logging.debug("Constructiong GetMany instance using get calls:\n{}".format(get_calls))
+        logging.debug("Constructing GetMany instance using get calls:\n{}".format(get_calls))
         getmany_instance = tree.getMany()
         getmany_keys = []
         # Append instructions to instance.
