@@ -27,7 +27,7 @@ def get_connector(server_name, reconnect=False):
     mds.Connection
         Connection to the server without a tree connection.
     """
-    global _mds_connection
+    global _mds_connection  # noqa: PLW0603
     if reconnect:
         logging.debug("Forcing reconnection to server.")
         try:
@@ -112,7 +112,7 @@ def get_remote_shot_tree(
     if tree_name is None:
         tree_name = config["tree_name"]
 
-    global _global_tree
+    global _global_tree  # noqa: PLW0603
     if isinstance(_global_tree, mds.Connection) and not reconnect:
         if (
             _global_tree.hostspec == server_name
