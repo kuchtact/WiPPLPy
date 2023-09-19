@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+    - stable
+    - v*.*.*
+    tags:
+    - v*
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+
+  initial-tests:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+
+        - name: Python 3.11 (Linux)
+          os: ubuntu-latest
+          python: '3.11'
+          toxenv: py311
+          toxargs: --develop
+
+        - name: Python 3.10 (MacOS)
+          os: macos-latest
+          python: '3.10'
+          toxenv: py310
+
+        - name: Python 3.9 (Windows)
+          os: windows-latest
+          python: 3.9
+          toxenv: py39
+
+  steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python }}
+        cache: pip
+
+    - name: Install Python dependencies
+      run: python -m pip install --progress-bar off --upgrade tox
+
+    - name: Run tests
+      run: tox ${{ matrix.toxargs }} -e ${{ matrix.toxenv }} -- ${{ matrix.toxposargs }}
+
+    - name: Upload coverage to codecov
+      if: ${{ contains(matrix.toxenv,'-cov') }}
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
