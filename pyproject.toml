@@ -20,6 +20,12 @@ tests = [
   "pytest >= 7.0.0",
   "tox >= 4.3.1",
 ]
+
+[tool.codespell]
+skip = "*.png"
+ignore-words-list = """
+ned"""
+
 [tool.ruff]
 target-version = "py39"
 extend-select = [
