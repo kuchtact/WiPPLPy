@@ -5,6 +5,8 @@ WiPPLPy
    :maxdepth: 2
    :caption: Contents:
 
+   Code Overview <code_overview>
+
 Indices and tables
 ==================
 
