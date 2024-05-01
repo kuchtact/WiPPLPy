@@ -5,7 +5,7 @@ Code Overview
 *************
 
 Code Operation
---------------
+==============
 
 Let's walk through how the code is structured and how it operates.
 
