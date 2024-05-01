@@ -6,6 +6,7 @@ WiPPLPy
    :caption: Contents:
 
    Code Overview <code_overview>
+   installation
 
 Indices and tables
 ==================
