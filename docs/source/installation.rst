@@ -4,14 +4,23 @@
 Installation
 ************
 
-Creating Documentation
-----------------------
+Installing WiPPLPy as a Contributor
+===================================
 
-To create the documentation, you will need to have `Sphinx`_ installed and `make`_. You can install it using pip::
+This installation is very similar to how PlasmaPy installation is done for 
+contributors: https://docs.plasmapy.org/en/stable/contributing/getting_ready.html.
+We've done some copy-pasting as to which steps should be followed.
+
+Creating Documentation
+======================
+
+To create the documentation, you will need to have `Sphinx`_ installed and 
+`make`_. You can install it using pip::
 
     pip install sphinx
 
-Then, you can create the documentation by entering the ``docs/`` directory and running the following command::
+Then, you can create the documentation by entering the ``docs/`` directory and 
+running the following command::
 
     make html
 
