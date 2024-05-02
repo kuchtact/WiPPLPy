@@ -7,6 +7,7 @@ WiPPLPy
 
    Code Overview <code_overview>
    installation
+   contributing
 
 Indices and tables
 ==================
