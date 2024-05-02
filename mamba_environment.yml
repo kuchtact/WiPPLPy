@@ -1,0 +1,16 @@
+name: WiPPLPy
+channels:
+  - defaults
+  - anaconda
+  - conda-forge
+dependencies:
+  - python
+  - jupyter
+  - numpy
+  - scipy
+  - matplotlib
+  - mdsplus
+  - tqdm
+  - configobj
+  - pyyaml
+  - sphinx
