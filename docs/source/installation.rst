@@ -132,13 +132,13 @@ create an environment for running the code in.
 
    .. code-block:: bash
 
-      mamba env create -f ./conda_environment.yml
+      mamba env create -f ./mamba_environment.yml
 
    If you are on a computer that uses the Mac silicon processor you can do so by
 
    .. code-block:: bash
 
-      CONDA_SUBDIR=osx-64 mamba env create -f ./conda_environment.yml
+      CONDA_SUBDIR=osx-64 mamba env create -f ./mamba_environment.yml
 
    This will create a new environment called ``WiPPLPy``.
 
