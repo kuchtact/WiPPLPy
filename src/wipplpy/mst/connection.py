@@ -8,6 +8,7 @@ from datetime import date
 import math
 
 # Local
+from WiPPLPy.modules.config_reader import ConfigReader
 from WiPPLPy.modules.connection import MDSPlusConnection
 
 
@@ -18,12 +19,12 @@ class MSTConnection(MDSPlusConnection):
         Initialize MST-relevant objects that are necessary for connecting to
         MDSplus.
         """
-        self.remote_server = ''
-        self.local_server = ''
+        self.remote_server = ConfigReader.MST_remote_server 
+        self.local_server = ConfigReader.MST_local_server 
         self.servers_dictionary = {
-                True: self.remote,
-                False: self.local}
-        self.tree_name = ''
+                True: self.remote_server,
+                False: self.local_server}
+        self.tree_name = ConfigReader.MST_tree 
 
     @staticmethod
     def data_location(shot_number):
@@ -62,10 +63,10 @@ class MSTConnection(MDSPlusConnection):
 
         Parameters
         ----------
-        shot_number: int
-            The shot-number from which to extract
-            MDSplus data.
+        shot_number: 'int'
+            The shot-number from which to extract MDSplus data.
         """
+        # Use the MDSPlusConnection.make_connection() method
         self.make_connection(shot_number, self.data_location(shot_number))
 
 

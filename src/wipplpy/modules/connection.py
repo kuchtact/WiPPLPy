@@ -1,5 +1,5 @@
 """
-This will contain a generic superclass for making MDSplus connections.
+Define the generic superclass through which to make MDSplus connections.
 
 TODO: Add a MySQL connection and maybe other connection types as well?
 """
