@@ -11,6 +11,9 @@ This installation is very similar to how PlasmaPy installation is done for
 contributors: https://docs.plasmapy.org/en/stable/contributing/getting_ready.html.
 We've done some copy-pasting as to which steps should be followed.
 
+If you are stuck or don't understand something, please ask for help or take a 
+look at the `PlasmaPy's conde contribution workflow`_.
+
 Pre-requisites
 --------------
 
@@ -106,15 +109,65 @@ contributing code to WiPPLPy, please take the following steps:
 #. `Add a new SSH key to your GitHub account`_. This step is needed for
    authentication purposes.
 
-Installing Your Clone of WiPPLPy
---------------------------------
+Forking and cloning the repository
+----------------------------------
 
-Once Mamba_ is installed and you have cloned the git repository then we need to 
-create an environment for running the code in.
+#. Log into `GitHub`_.
 
-1. :ref:`Open a terminal <opening-a-terminal>`.
+#. Go to the `WiPPLPy repository`_.
 
-2. Navigate to the directory for your clone of WiPPLPy, which should be
+#. Create a fork of WiPPLPy by clocking on :guilabel:`Fork`, followed by 
+   :guilabel:`Create Fork`.
+
+#. :ref:`Open a terminal <opening-a-terminal>`. Navigate to the folder where 
+   you want to clone the WiPPLPy repository. For example, to clone the 
+   repository into the :file:`~/repos/` directory, run:
+
+   .. code-block:: bash
+
+      mkdir ~/repos
+      cd ~/repos
+
+#. Clone_ the WiPPLPy repository with the following command, replacing
+   ``YOUR-USERNAME`` with your GitHub username. This will create a
+   subdirectory called :file:`WiPPLPy/` containing your local clone of
+   the repository.
+
+   .. code-block:: bash
+
+      git clone git@github.com:YOUR-USERNAME/WiPPLPy.git
+
+   .. tip::
+
+      If you have trouble connecting to GitHub, you may need to `add a
+      new SSH key to your GitHub account`_.
+
+#. Enter the newly created directory with:
+
+   .. code-block:: bash
+
+      cd WiPPLPy
+
+#. Add a remote_ called ``upstream`` for the `WiPPLPy's repository`
+   by using the following command.
+
+   .. code-block:: bash
+
+      git remote add upstream git@github.com:kuchtact/WiPPLPy.git
+
+   If you run ``git remote -v``, you should see that ``origin``
+   corresponds to your fork_ and ``upstream`` corresponds to
+   the `WiPPLPy repository`_.
+
+Installing WiPPLPy from a Fork
+------------------------------
+
+Once Mamba_ is installed and you have cloned your fork of the git repository 
+then we need to create an environment for running the code in.
+
+#. :ref:`Open a terminal <opening-a-terminal>`.
+
+#. Navigate to the directory for your clone of WiPPLPy, which should be
    named :file:`WiPPLPy`. For example, if you ran the ``git clone``
    command in the :file:`~/repos/` directory, then run:
 
@@ -126,7 +179,7 @@ create an environment for running the code in.
 
       In Windows, the directory path will be :file:`C:\\Users\\<username>\\repos\\WiPPLPy`.
 
-3. Create a Mamba_ environment using the packages from 
+#. Create a Mamba_ environment using the packages from 
    :file:`mamba_environment.yml`. If you are on a computer that does not use 
    the Mac silicon processor you can do so by running
 
@@ -142,14 +195,14 @@ create an environment for running the code in.
 
    This will create a new environment called ``WiPPLPy``.
 
-4. Activate the environment and start python by running:
+#. Activate the environment and start python by running:
 
    .. code-block:: bash
 
       mamba activate WiPPLPy
       python
 
-5. We need to add the :file:`WiPPLPy/source/` directory to the Python path. We 
+#. We need to add the :file:`WiPPLPy/source/` directory to the Python path. We 
    can find the path to :file:`WiPPLPy/source/` and the :file:`site-packages` 
    directory by running the following Python code:
 
@@ -160,10 +213,10 @@ create an environment for running the code in.
       import os
       print('WiPPLPy source code directory:', os.getcwd())
 
-6. Exit out of python and nagigate to the :file:`site-packages` directory that 
+#. Exit out of python and nagigate to the :file:`site-packages` directory that 
    was printed. It should end in :file:`site-packages`.
 
-7. Create a file called :file:`wipplpy.pth`. This file should contain the path 
+#. Create a file called :file:`wipplpy.pth`. This file should contain the path 
    to the :file:`WiPPLPy/source/` directory. For example, if the path to the 
    :file:`WiPPLPy/source/` directory is :file:`/Users/username/repos/WiPPLPy/source/` 
    then the :file:`wipplpy.pth` file should contain the following:
@@ -172,7 +225,7 @@ create an environment for running the code in.
 
       /Users/username/repos/WiPPLPy/source/
 
-8. Test that the installation was successful by running the following Python 
+#. Test that the installation was successful by running the following Python 
    code:
 
    .. code-block:: python
@@ -224,7 +277,6 @@ Open the documentation by double clicking on the :file:`index.html` file in the
 .. _remote: https://github.com/git-guides/git-remote
 .. _sign up on GitHub: https://github.com/join
 .. _terminal user guide: https://support.apple.com/guide/terminal/welcome/mac
-.. _this xkcd comic: https://xkcd.com/1987
 .. _unix tutorial: https://www.hpc.iastate.edu/guides/unix-introduction/unix-tutorial-1
 .. _using an environment: https://docs.anaconda.com/navigator/tutorials/manage-environments/#using-an-environment
 .. _venv: https://docs.python.org/3/library/venv.html
@@ -233,4 +285,6 @@ Open the documentation by double clicking on the :file:`index.html` file in the
 .. _WSL: https://learn.microsoft.com/en-us/windows/wsl
 .. _git: https://git-scm.com
 .. _GitHub: https://github.com
+.. _WiPPLPy repository: https://github.com/kuchtact/WiPPLPy
+.. _PlasmaPy's conde contribution workflow: https://docs.plasmapy.org/en/stable/contributing/workflow.html
 
