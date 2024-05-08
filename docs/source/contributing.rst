@@ -210,18 +210,10 @@ Creating a pull request
 At this stage, a reviewer will perform a code review, unless it has been
 marked as a draft pull request. Thank you for contributing!
 
-.. _Add a new SSH key to your GitHub account: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
 .. _branch: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-branches
 .. _fork: https://docs.github.com/en/get-started/quickstart/fork-a-repo
-.. _GitHub Documentation: https://docs.github.com/
 .. _git stash: https://git-scm.com/docs/git-stash
-.. _good first issue: https://github.com/PlasmaPy/PlasmaPy/issues?q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22
 .. _pull request: https://docs.github.com/en/github/collaborating-with-pull-requests
 .. _remote: https://github.com/git-guides/git-remote
-.. _sign up for an ORCID iD: https://orcid.org/register
 .. _WiPPLPy's GitHub repository: https://github.com/kuchtact/WiPPLPy
 .. _GitHub: https://github.com
-
-.. _`CITATION.cff`: https://github.com/PlasmaPy/PlasmaPy/blob/main/CITATION.cff
-.. |CITATION.cff| replace:: :file:`CITATION.cff`
-
