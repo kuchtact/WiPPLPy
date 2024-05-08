@@ -12,7 +12,7 @@ contributors: https://docs.plasmapy.org/en/stable/contributing/getting_ready.htm
 We've done some copy-pasting as to which steps should be followed.
 
 If you are stuck or don't understand something, please ask for help or take a 
-look at the `PlasmaPy's conde contribution workflow`_.
+look at the `PlasmaPy's code contribution workflow`_.
 
 Pre-requisites
 --------------
@@ -256,35 +256,22 @@ Open the documentation by double clicking on the :file:`index.html` file in the
 .. _clone: https://github.com/git-guides/git-clone
 .. _Conda: https://docs.conda.io
 .. _Mamba: https://mamba.readthedocs.io/en/latest/index.html
-.. _creating an environment: https://docs.anaconda.com/navigator/tutorials/manage-environments/#creating-a-new-environment
 .. _Python: https://www.python.org
-.. _download Python: https://www.python.org/downloads
 .. _fork: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks
 .. _frequently used Unix commands: https://faculty.tru.ca/nmora/Frequently%20used%20UNIX%20commands.pdf
-.. _git commands for setup and config: https://git-scm.com/book/en/v2/Appendix-C%3A-Git-Commands-Setup-and-Config
 .. _install git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
-.. _install Graphviz: https://graphviz.org/download
-.. _install pandoc: https://pandoc.org/installing.html
 .. _installing Mamba from an existing Conda install: https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html#existing-conda-install-not-recommended
 .. _installing Conda: https://conda.io/projects/conda/en/latest/user-guide/install/index.html
 .. _installing Mamba: https://github.com/conda-forge/miniforge?tab=readme-ov-file#install
-.. _installing Python: https://realpython.com/installing-python
 .. _installing WSL: https://learn.microsoft.com/en-us/windows/wsl/install
-.. _miniconda: https://docs.conda.io/en/latest/miniconda.html
 .. _opening Powershell: https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7.3
 .. _powershell: https://learn.microsoft.com/en-us/powershell
-.. _Real Python: https://realpython.com
 .. _remote: https://github.com/git-guides/git-remote
 .. _sign up on GitHub: https://github.com/join
-.. _terminal user guide: https://support.apple.com/guide/terminal/welcome/mac
 .. _unix tutorial: https://www.hpc.iastate.edu/guides/unix-introduction/unix-tutorial-1
-.. _using an environment: https://docs.anaconda.com/navigator/tutorials/manage-environments/#using-an-environment
-.. _venv: https://docs.python.org/3/library/venv.html
-.. _virtual environment: https://realpython.com/python-virtual-environments-a-primer
 .. _Windows Subsystem for Linux: https://learn.microsoft.com/en-us/windows/wsl
-.. _WSL: https://learn.microsoft.com/en-us/windows/wsl
 .. _git: https://git-scm.com
 .. _GitHub: https://github.com
 .. _WiPPLPy repository: https://github.com/kuchtact/WiPPLPy
-.. _PlasmaPy's conde contribution workflow: https://docs.plasmapy.org/en/stable/contributing/workflow.html
+.. _PlasmaPy's code contribution workflow: https://docs.plasmapy.org/en/stable/contributing/workflow.html
 
