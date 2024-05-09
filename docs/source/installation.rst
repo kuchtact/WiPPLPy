@@ -160,17 +160,17 @@ create an environment for running the code in.
       import os
       print('WiPPLPy source code directory:', os.getcwd())
 
-6. Exit out of python and nagigate to the :file:`site-packages` directory that 
+6. Exit out of python and navigate to the :file:`site-packages` directory that 
    was printed. It should end in :file:`site-packages`.
 
 7. Create a file called :file:`wipplpy.pth`. This file should contain the path 
-   to the :file:`WiPPLPy/source/` directory. For example, if the path to the 
-   :file:`WiPPLPy/source/` directory is :file:`/Users/username/repos/WiPPLPy/source/` 
+   to the :file:`WiPPLPy/src/` directory. For example, if the path to the 
+   :file:`WiPPLPy/src/` directory is :file:`/Users/username/repos/WiPPLPy/src/` 
    then the :file:`wipplpy.pth` file should contain the following:
 
    .. code-block:: bash
 
-      /Users/username/repos/WiPPLPy/source/
+      /Users/username/repos/WiPPLPy/src/
 
 8. Test that the installation was successful by running the following Python 
    code:

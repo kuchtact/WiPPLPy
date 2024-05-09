@@ -4,7 +4,7 @@ import re
 import numpy as np
 from MDSplus.connection import Connection, MdsIpException
 from MDSplus.mdsExceptions import MDSplusException, SsSUCCESS
-from modules.shot_loader import get_remote_shot_tree
+from wipplpy.modules.shot_loader import get_remote_shot_tree 
 from scipy.io import loadmat, savemat
 
 
