@@ -5,9 +5,8 @@ TODO: Add a MySQL connection and maybe other connection types as well?
 """
 
 from abc import ABC, abstractmethod
-import socket
-
 import MDSplus as mds
+import socket
 
 
 class MDSPlusConnection(ABC):
@@ -18,7 +17,10 @@ class MDSPlusConnection(ABC):
         self.is_remote_connection = None # bool tracking if conn. is remote
 
     @abstractmethod
-    def make_connection(self, shot_number, tree_name, server_name):
+    def make_connection(self, shot_number):
+        pass
+
+    def _local_and_remote_connection(self, shot_number, tree_name, server_name):
         """
         Determine whether a local or remote connection is necessary, and then
         execute the corresponding method.
@@ -27,10 +29,6 @@ class MDSPlusConnection(ABC):
         ----------
         shot_number : `int`
             The shot number from which to extract MDSplus data.
-        tree_name : `str`
-            String representing the tree name of the device's MDSplus database.
-        server_name : `str`
-            String representing the server in which the shot's data is located.
         """
         local_server = socket.gethostname()
         if local_server == server_name:

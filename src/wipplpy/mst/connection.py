@@ -10,20 +10,17 @@ from WiPPLPy.modules.connection import MDSPlusConnection
 
 
 class MSTConnection(MDSPlusConnection):
-    def __init__(self):
+    def __init__(self, config_reader = ConfigReader()):
         """
         Initialize MST-relevant objects necessary for connecting to MDSplus.
-        """
-        self.runday_data_server_name = ConfigReader.MST_runday_data_server
-        self.past_data_server_name = ConfigReader.MST_past_data_server
-        self.servers_dictionary = {
-                True: self.runday_data_server_name,
-                False: self.past_data_server_name
-                }
-        self.tree_name = ConfigReader.MST_tree() 
 
-    @staticmethod
-    def data_location(shot_number):
+        Parameters
+        ----------
+        config_reader : `WiPPLPy.modules.config_reader.ConfigReader`
+        """
+        self.config_reader = config_reader
+
+    def data_location(self, shot_number):
         """
         Determine the server name where shot data is stored.
 
@@ -52,8 +49,10 @@ class MSTConnection(MDSPlusConnection):
         shot_string = str(shot_number)
 
         # Compare the shot string to the date
-        run_day = (shot_string[:-3] == date_mst_syntax)
-        server_name = self.servers_dictionary[run_day]()
+        if shot_string[:-3] == date_mst_syntax:
+            server_name = self.config_reader.MST_runday_data_server
+        else:
+            server_name = self.config_reader.MST_past_data_server
         logging.debug(
                 "Shot '%s' data is stored on the '%s' server.",
                 shot_string,
@@ -62,7 +61,7 @@ class MSTConnection(MDSPlusConnection):
 
         return server_name
 
-    def make_connection(self, shot_number, tree_name):
+    def make_connection(self, shot_number):
         """ 
         Establish an MDSplus connection to the appropriate MST data server.
 
@@ -70,11 +69,9 @@ class MSTConnection(MDSPlusConnection):
         ----------
         shot_number : `int`
             The shot number from which to extract MDSplus data.
-        tree_name : `str`
-            String representing the tree name of the device's MDSplus database.
         """
-        self.make_connection(
+        self._local_and_remote_connection(
                 shot_number, 
-                self.tree_name,
+                self.config_reader.MST_tree,
                 self.data_location(shot_number)
                 )

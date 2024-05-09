@@ -7,14 +7,17 @@ from WiPPLPy.modules.connection import MDSPlusConnection
 
 
 class BRBConnection(MDSPlusConnection):
-    def __init__(self):
+    def __init__(self, config_reader = ConfigReader()):
         """
         Initialize BRB-relevant objects necessary for connecting to MDSplus.
-        """
-        self.remote_server_name = ConfigReader.BRB_remote_server()
-        self.tree_name = ConfigReader.BRB_tree()
 
-    def make_connection(self, shot_number, tree_name, server_name):
+        Parameters
+        ----------
+        config_reader
+        """
+        self.config_reader = config_reader
+
+    def make_connection(self, shot_number):
         """
         Establish an MDSplus connection to the appropriate BRB data server.
 
@@ -22,13 +25,9 @@ class BRBConnection(MDSPlusConnection):
         ----------
         shot_number : `int`
             The shot number from which to extract MDSplus data.
-        tree_name : `str`
-            String representing the tree name of the device's MDSplus database.
-        server_name : `str`
-            String representing the server in which the shot's data is located.
         """
         self.make_connection(
                 shot_number,
-                self.tree_name,
-                self.remote_server_name
+                self.config_reader.BRB_tree,
+                self.config_reader.BRB_remote_server
                 )
