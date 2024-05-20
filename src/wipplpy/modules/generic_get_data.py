@@ -521,6 +521,8 @@ class Data:
                     )
                     try_loading = True
                     self.tree = get_remote_shot_tree(self.shot_number, reconnect=True)
+        
+        #Going to be changing to put into xarray arrays
 
         if self.ignore_errors:
             try:
@@ -535,7 +537,7 @@ class Data:
             data = data.astype(np_data_type)
             logging.debug(f"Changed data to type '{np_data_type}'.")
 
-        # Only save calls if the dictionary exists. The dictionary doesn't exist during some stages of initialization so that we don't save incorrect data.
+        # Only save calls if the dictionary exists. Th dictionary doesn't exist during some stages of initialization so that we don't save incorrect data.
         if hasattr(self, "saved_calls"):
             # logging.debug("Adding data from get call with `save_name='{}'` into `saved_calls`.".format(save_name))
             if save_name in self.saved_calls:
@@ -543,7 +545,7 @@ class Data:
                     "Save name ({}) is the same as a save name already in the data to save dictionary. Overwriting old data."
                 )
             self.saved_calls[save_name] = data
-
+        #
         return data
 
     def to_raw_index(self, time_index):
