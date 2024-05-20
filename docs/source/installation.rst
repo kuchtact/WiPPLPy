@@ -11,6 +11,9 @@ This installation is very similar to how PlasmaPy installation is done for
 contributors: https://docs.plasmapy.org/en/stable/contributing/getting_ready.html.
 We've done some copy-pasting as to which steps should be followed.
 
+If you are stuck or don't understand something, please ask for help or take a 
+look at the `PlasmaPy's code contribution workflow`_.
+
 Pre-requisites
 --------------
 
@@ -106,15 +109,65 @@ contributing code to WiPPLPy, please take the following steps:
 #. `Add a new SSH key to your GitHub account`_. This step is needed for
    authentication purposes.
 
-Installing Your Clone of WiPPLPy
---------------------------------
+Forking and cloning the repository
+----------------------------------
 
-Once Mamba_ is installed and you have cloned the git repository then we need to 
-create an environment for running the code in.
+#. Log into `GitHub`_.
 
-1. :ref:`Open a terminal <opening-a-terminal>`.
+#. Go to the `WiPPLPy repository`_.
 
-2. Navigate to the directory for your clone of WiPPLPy, which should be
+#. Create a fork of WiPPLPy by clocking on :guilabel:`Fork`, followed by 
+   :guilabel:`Create Fork`.
+
+#. :ref:`Open a terminal <opening-a-terminal>`. Navigate to the folder where 
+   you want to clone the WiPPLPy repository. For example, to clone the 
+   repository into the :file:`~/repos/` directory, run:
+
+   .. code-block:: bash
+
+      mkdir ~/repos
+      cd ~/repos
+
+#. Clone_ the WiPPLPy repository with the following command, replacing
+   ``YOUR-USERNAME`` with your GitHub username. This will create a
+   subdirectory called :file:`WiPPLPy/` containing your local clone of
+   the repository.
+
+   .. code-block:: bash
+
+      git clone git@github.com:YOUR-USERNAME/WiPPLPy.git
+
+   .. tip::
+
+      If you have trouble connecting to GitHub, you may need to `add a
+      new SSH key to your GitHub account`_.
+
+#. Enter the newly created directory with:
+
+   .. code-block:: bash
+
+      cd WiPPLPy
+
+#. Add a remote_ called ``upstream`` for the `WiPPLPy's repository`
+   by using the following command.
+
+   .. code-block:: bash
+
+      git remote add upstream git@github.com:kuchtact/WiPPLPy.git
+
+   If you run ``git remote -v``, you should see that ``origin``
+   corresponds to your fork_ and ``upstream`` corresponds to
+   the `WiPPLPy repository`_.
+
+Installing WiPPLPy from a Fork
+------------------------------
+
+Once Mamba_ is installed and you have cloned your fork of the git repository 
+then we need to create an environment for running the code in.
+
+#. :ref:`Open a terminal <opening-a-terminal>`.
+
+#. Navigate to the directory for your clone of WiPPLPy, which should be
    named :file:`WiPPLPy`. For example, if you ran the ``git clone``
    command in the :file:`~/repos/` directory, then run:
 
@@ -126,7 +179,7 @@ create an environment for running the code in.
 
       In Windows, the directory path will be :file:`C:\\Users\\<username>\\repos\\WiPPLPy`.
 
-3. Create a Mamba_ environment using the packages from 
+#. Create a Mamba_ environment using the packages from 
    :file:`mamba_environment.yml`. If you are on a computer that does not use 
    the Mac silicon processor you can do so by running
 
@@ -142,14 +195,14 @@ create an environment for running the code in.
 
    This will create a new environment called ``WiPPLPy``.
 
-4. Activate the environment and start python by running:
+#. Activate the environment and start python by running:
 
    .. code-block:: bash
 
       mamba activate WiPPLPy
       python
 
-5. We need to add the :file:`WiPPLPy/source/` directory to the Python path. We 
+#. We need to add the :file:`WiPPLPy/source/` directory to the Python path. We 
    can find the path to :file:`WiPPLPy/source/` and the :file:`site-packages` 
    directory by running the following Python code:
 
@@ -172,7 +225,7 @@ create an environment for running the code in.
 
       /Users/username/repos/WiPPLPy/src/
 
-8. Test that the installation was successful by running the following Python 
+#. Test that the installation was successful by running the following Python 
    code:
 
    .. code-block:: python
@@ -203,34 +256,22 @@ Open the documentation by double clicking on the :file:`index.html` file in the
 .. _clone: https://github.com/git-guides/git-clone
 .. _Conda: https://docs.conda.io
 .. _Mamba: https://mamba.readthedocs.io/en/latest/index.html
-.. _creating an environment: https://docs.anaconda.com/navigator/tutorials/manage-environments/#creating-a-new-environment
 .. _Python: https://www.python.org
-.. _download Python: https://www.python.org/downloads
 .. _fork: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks
 .. _frequently used Unix commands: https://faculty.tru.ca/nmora/Frequently%20used%20UNIX%20commands.pdf
-.. _git commands for setup and config: https://git-scm.com/book/en/v2/Appendix-C%3A-Git-Commands-Setup-and-Config
 .. _install git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
-.. _install Graphviz: https://graphviz.org/download
-.. _install pandoc: https://pandoc.org/installing.html
 .. _installing Mamba from an existing Conda install: https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html#existing-conda-install-not-recommended
 .. _installing Conda: https://conda.io/projects/conda/en/latest/user-guide/install/index.html
 .. _installing Mamba: https://github.com/conda-forge/miniforge?tab=readme-ov-file#install
-.. _installing Python: https://realpython.com/installing-python
 .. _installing WSL: https://learn.microsoft.com/en-us/windows/wsl/install
-.. _miniconda: https://docs.conda.io/en/latest/miniconda.html
 .. _opening Powershell: https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell?view=powershell-7.3
 .. _powershell: https://learn.microsoft.com/en-us/powershell
-.. _Real Python: https://realpython.com
 .. _remote: https://github.com/git-guides/git-remote
 .. _sign up on GitHub: https://github.com/join
-.. _terminal user guide: https://support.apple.com/guide/terminal/welcome/mac
-.. _this xkcd comic: https://xkcd.com/1987
 .. _unix tutorial: https://www.hpc.iastate.edu/guides/unix-introduction/unix-tutorial-1
-.. _using an environment: https://docs.anaconda.com/navigator/tutorials/manage-environments/#using-an-environment
-.. _venv: https://docs.python.org/3/library/venv.html
-.. _virtual environment: https://realpython.com/python-virtual-environments-a-primer
 .. _Windows Subsystem for Linux: https://learn.microsoft.com/en-us/windows/wsl
-.. _WSL: https://learn.microsoft.com/en-us/windows/wsl
 .. _git: https://git-scm.com
 .. _GitHub: https://github.com
+.. _WiPPLPy repository: https://github.com/kuchtact/WiPPLPy
+.. _PlasmaPy's code contribution workflow: https://docs.plasmapy.org/en/stable/contributing/workflow.html
 
