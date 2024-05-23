@@ -2,6 +2,7 @@ import logging
 import re
 
 import numpy as np
+import xarray as xr
 from MDSplus.connection import Connection, MdsIpException
 from MDSplus.mdsExceptions import MDSplusException, SsSUCCESS
 from wipplpy.modules.shot_loader import get_remote_shot_tree 
@@ -429,7 +430,7 @@ class Data:
         return variable_vals
 
     def get(  # noqa: PLR0912, PLR0915
-        self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True
+        self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True,
     ):
         """
         Get data from the mdsplus tree and change it to the correct type using a get call.
@@ -521,8 +522,6 @@ class Data:
                     )
                     try_loading = True
                     self.tree = get_remote_shot_tree(self.shot_number, reconnect=True)
-        
-        #Going to be changing to put into xarray arrays
 
         if self.ignore_errors:
             try:
@@ -545,8 +544,35 @@ class Data:
                     "Save name ({}) is the same as a save name already in the data to save dictionary. Overwriting old data."
                 )
             self.saved_calls[save_name] = data
+
+        self.to_xarray(data, xarray_args=xarray_args, xarray_kwargs=xarray_kwargs)
+    
+    def gather_to_xarray(self, path):
+        """
+        Package data along with dimensions and attributes into an xarray DataArray. Pulls data from MDSPlus or local files.
+        """
+        #get data first as numpy array
+        #get dimensions of array
+        #   spatial ()
+        #   time (add sampling rate as attribute, might be unnecessary)
+        #get coordinates for dimensions that need it
+        #units on dimensions (is this stored as an attribute of the array or of the coord)
+        #fill in attributes (e.g. machine, maybe port info)
         #
-        return data
+        #data = get(path)
+        #
+        #data_array = xr.DataArray(data)
+        #any other additions to the DataArray
+        #self.data = data_array
+        pass
+
+    def package_as_DataSet(self, path_list):
+        '''
+        Gather and combine multiple xarray DataArrays into a single DataSet. May
+        have multiple calls to gather_to_xarray, or maybe can also pass in DataArrays
+        explicitly which have already been put together.
+        '''
+        pass
 
     def to_raw_index(self, time_index):
         """
