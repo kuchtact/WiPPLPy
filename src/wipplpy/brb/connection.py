@@ -13,7 +13,9 @@ class BRBConnection(MDSPlusConnection):
 
         Parameters
         ----------
-        config_reader
+        config_reader : `WiPPLPy.modules.config_reader.ConfigReader`
+            Class object that reads from the INI file containing MDSplus
+            labels.
         """
         self.config_reader = config_reader
 
