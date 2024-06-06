@@ -17,6 +17,8 @@ class MSTConnection(MDSPlusConnection):
         Parameters
         ----------
         config_reader : `WiPPLPy.modules.config_reader.ConfigReader`
+            Class object that reads from the INI file containing MDSplus
+            labels.
         """
         self.config_reader = config_reader
 
@@ -54,7 +56,7 @@ class MSTConnection(MDSPlusConnection):
         else:
             server_name = self.config_reader.MST_past_data_server
         logging.debug(
-                "Shot '%s' data is stored on the '%s' server.",
+                "Shot `%s` data is stored on the `%s` server.",
                 shot_string,
                 server_name
                 )
