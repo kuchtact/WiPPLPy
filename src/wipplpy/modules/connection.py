@@ -13,7 +13,7 @@ class MDSPlusConnection(ABC):
     """
     Create the generic superclass for generating MDSplus connections.
     """
-    def __init__(self, ...):
+    def __init__(self):
         self.is_remote_connection = None # bool tracking if conn. is remote
 
     @abstractmethod
@@ -29,6 +29,10 @@ class MDSPlusConnection(ABC):
         ----------
         shot_number : `int`
             The shot number from which to extract MDSplus data.
+        tree_name : `str`
+            String representing the tree name of the device's MDSplus database. 
+        server_name : `str`
+            String representing the server in which the shot's data is located.
         """
         local_server = socket.gethostname()
         if local_server == server_name:
@@ -37,20 +41,27 @@ class MDSPlusConnection(ABC):
             except (ConnectionRefusedError, TimeoutError) as e:
                 # Local connection did not work. Try a remote connection
                 self._remote_connect(shot_number, tree_name, server_name)
+                raise
             except Exception as e:
                 # An unexpected exception is raised
                 print("An error occurred while attempting to connect to"
                         f" {server_name}:", e
                         )
+                raise
 
         else:
             try:
                 self._remote_connect(shot_number, tree_name, server_name)
+            except (ConnectionRefusedError, TimeoutError) as e:
+                # Remote connection did not work. Try a local connection?
+                self._local_connect(shot_number, tree_name)
+                raise
             except Exception as e:
                 # An unexpected exception is raised
                 print("An error occurred while attempting to remotely connect"
                         f" to {server_name}:", e
                         )
+                raise
 
     def _local_connect(self, shot_number, tree_name):
         """
