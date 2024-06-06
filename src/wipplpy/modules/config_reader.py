@@ -7,7 +7,7 @@ import configparser
 import os
 import sys
 
-from generic_get_data import lazy_get
+from WiPPLPy.modules.generic_get_data import lazy_get
 
 
 class ConfigReader:
@@ -21,8 +21,8 @@ class ConfigReader:
             The path name of the INI file.
         """
         self.config_filepath = config_filepath
+        self.config = configparser.ConfigParser()
 
-        # Fetch the INI file 
         if self.config_filepath is None:
             # Locate the standard INI file relative to this file's location
             this_file_directory = os.path.dirname(os.path.abspath(__file__))
@@ -30,41 +30,40 @@ class ConfigReader:
                     this_file_directory,
                     "../../../mdsplus_config.ini"
                     ))
-            try:
-                if not os.path.exists(ini_file_path):
-                    raise FileNotFoundError("INI file mdsplus_config.ini"
-                            " not found. Please ensure that the file exists"
-                            " in the appropriate directory."
-                            )
-                # Read the INI file using configparser
-                self.config = configparser.ConfigParser()
-                self.config.read(ini_file_path)
-            except FileNotFoundError as e:
-                print(e)
-            except Exception as e:
-                # Handle exceptions other than being unable to locate the file
-                print("An error occurred while trying to access the standard"
-                        " MDSplus INI file:", e
-                        )
+            self.config_filepath = ini_file_path # pass INI filepath to argument
 
+        if not os.path.exists(self.config_filepath):
+            raise FileNotFoundError(
+                    f"INI file {self.config_filepath} not found. Please ensure"
+                            " that the file exists in the appropriate"
+                            " directory."
+                    )
         else:
             try:
-                if not os.path.exists(self.config_filepath):
-                    raise FileNotFoundError("INI file"
-                            f" {self.config_filepath} not found. Please ensure"
-                            " that the specified path correctly points to the"
-                            " appropriate file."
-                            )
-                # Read the INI file using configparser
-                self.config = configparser.ConfigParser()
                 self.config.read(self.config_filepath)
-            except FileNotFoundError as e:
-                print(e)
-            except Exception as e:
-                # Handle exceptions other than being unable to locate the file
-                print("An error occurred while trying to access the specified"
-                        " MDSplus INI file:", e
+            except FileNotFoundError:
+                logging.exception(
+                        "Error occurred while trying to read the INI file"
+                                " located in `%s`. File was not found.",
+                        self.config_filepath
                         )
+                raise
+            except SyntaxError:
+                logging.exception(
+                        "Error occurred while parsing the INI file located in"
+                                " `%s`. Please ensure that the file format is
+                                correct.",
+                        self.config_filepath
+                        )
+                raise
+            except Exception as e:
+                logging.exception(
+                        "An unexpected error occurred while trying to read the"
+                                " INI file located in `%s`: %s",
+                        self.config_filepath,
+                        e
+                        )
+                raise
 
     ### Define methods for loading MDSplus labels from the INI file ###
     @lazy_get
