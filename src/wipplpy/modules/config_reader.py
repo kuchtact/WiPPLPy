@@ -1,6 +1,6 @@
 """
-Extract from a local INI file the MDSplus labels for locating and accessing
-datasets of MST and BRB.
+Define routines for accessing and extracting information from locally saved
+config files.
 """
 
 import configparser
@@ -11,6 +11,10 @@ from WiPPLPy.modules.generic_get_data import lazy_get
 
 
 class ConfigReader:
+    """
+    Access the local INI file containing relevant MDSplus labels and define
+    methods for referring to each label.
+    """
     def __init__(self, config_filepath = None):
         """
         Locate the appropriate INI file for accessing MDSplus datasets.
@@ -30,13 +34,13 @@ class ConfigReader:
                     this_file_directory,
                     "../../../mdsplus_config.ini"
                     ))
-            self.config_filepath = ini_file_path # pass INI filepath to argument
+            self.config_filepath = ini_file_path  # pass string path to argument
 
         if not os.path.exists(self.config_filepath):
             raise FileNotFoundError(
                     f"INI file {self.config_filepath} not found. Please ensure"
-                            " that the file exists in the appropriate"
-                            " directory."
+                    " that the file exists in the appropriate"
+                    " directory."
                     )
         else:
             try:
@@ -44,28 +48,26 @@ class ConfigReader:
             except FileNotFoundError:
                 logging.exception(
                         "Error occurred while trying to read the INI file"
-                                " located in `%s`. File was not found.",
+                        " located in `%s`. File was not found.",
                         self.config_filepath
                         )
                 raise
             except SyntaxError:
                 logging.exception(
                         "Error occurred while parsing the INI file located in"
-                                " `%s`. Please ensure that the file format is
-                                correct.",
+                        " `%s`. Please ensure that the file format is correct.",
                         self.config_filepath
                         )
                 raise
             except Exception as e:
                 logging.exception(
                         "An unexpected error occurred while trying to read the"
-                                " INI file located in `%s`: %s",
+                        " INI file located in `%s`: `%s`",
                         self.config_filepath,
                         e
                         )
                 raise
 
-    ### Define methods for loading MDSplus labels from the INI file ###
     @lazy_get
     def BRB_remote_server(self):
         return self.config['BRB']['mdsplus_server']

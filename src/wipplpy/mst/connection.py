@@ -1,5 +1,5 @@
 """
-Create the MSTConnection() class for making MST-MDSplus connection requests.
+Create objects pertaining to accessing databases for the MST device.
 """
 
 from datetime import date
@@ -10,9 +10,12 @@ from WiPPLPy.modules.connection import MDSPlusConnection
 
 
 class MSTConnection(MDSPlusConnection):
+    """
+    Open the MST-MDSplus database for a given shot number.
+    """
     def __init__(self, config_reader = ConfigReader()):
         """
-        Initialize MST-relevant objects necessary for connecting to MDSplus.
+        Initialize class attributes.
 
         Parameters
         ----------
@@ -24,7 +27,7 @@ class MSTConnection(MDSPlusConnection):
 
     def data_location(self, shot_number):
         """
-        Determine the server name where shot data is stored.
+        Determine the server in which the given shot number's data is stored.
 
         Parameters
         ----------
@@ -38,12 +41,13 @@ class MSTConnection(MDSPlusConnection):
 
         Notes
         -----
-        Run-day and past days' data are stored in separate servers for MST.
-        This routine chooses which server is needed based on the shot number
-        syntax. E.g., the shot `1230419031` corresponds to shot 31 from April
-        19, 2023.
+        Run-day and past days' data are stored on separate servers for MST. This
+        routine selects the appropriate server based on the shot-number syntax.
+        For example, the shot '1230419031' corresponds to shot 31 from April 19,
+        2023, from which it can be determined whether the date is the present
+        run-day or a past day.
         """
-        # Prepare the date in MST shot-syntax
+        # Prepare the date in MST's shot syntax
         date_today = date.today()
         millenium_index = math.floor(date_today.year / 1000) - 1
         date_mst_syntax = millenium_index + date_today.strftime('%y%m%d')

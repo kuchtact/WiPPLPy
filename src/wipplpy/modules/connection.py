@@ -1,5 +1,5 @@
 """
-Define generic superclasses for accessing devices' databases.
+Define generic objects for accessing WiPPL devices' databases.
 
 TODO: Add a MySQL connection and maybe other connection types as well?
 """
@@ -11,10 +11,10 @@ import socket
 
 class MDSPlusConnection(ABC):
     """
-    Create the generic superclass for generating MDSplus connections.
+    Define generalized routines for accessing MDSplus databases.
     """
     def __init__(self):
-        self.is_remote_connection = None # bool tracking if conn. is remote
+        self.is_remote_connection = None  # track when remote conn. is made 
 
     @abstractmethod
     def make_connection(self, shot_number):
@@ -23,7 +23,7 @@ class MDSPlusConnection(ABC):
     def _local_and_remote_connection(self, shot_number, tree_name, server_name):
         """
         Determine whether a local or remote connection is necessary, and then
-        execute the corresponding method.
+        call the corresponding method.
 
         Parameters
         ----------
@@ -38,34 +38,51 @@ class MDSPlusConnection(ABC):
         if local_server == server_name:
             try:
                 self._local_connect(shot_number, tree_name)
-            except (ConnectionRefusedError, TimeoutError) as e:
-                # Local connection did not work. Try a remote connection
-                self._remote_connect(shot_number, tree_name, server_name)
-                raise
             except Exception as e:
-                # An unexpected exception is raised
-                print("An error occurred while attempting to connect to"
-                        f" {server_name}:", e
+                # Local connection failed. Try a remote conn. for completeness
+                logging.debug(
+                        "Failed attempted local connection: `%s`\nTrying a"
+                        " remote connection.",
+                        e
                         )
-                raise
+                try:
+                    self._remote_connect(shot_number, tree_name, server_name)
+                except Exception as e:
+                    # Neither connection type succeeded. Raise the exception
+                    self.is_remote_connection = None  # reset the flag
+                    logging.exception(
+                            "An error occurred while attempting to connect to"
+                            " `%s`: `%s`",
+                            server_name,
+                            e
+                            )
+                    raise
 
         else:
             try:
                 self._remote_connect(shot_number, tree_name, server_name)
-            except (ConnectionRefusedError, TimeoutError) as e:
-                # Remote connection did not work. Try a local connection?
-                self._local_connect(shot_number, tree_name)
-                raise
             except Exception as e:
-                # An unexpected exception is raised
-                print("An error occurred while attempting to remotely connect"
-                        f" to {server_name}:", e
+                # Remote connection failed. Try a local conn. for completeness
+                logging.debug(
+                        "Failed attempted remote connection: `%s`\nTrying a"
+                        " local connection.",
+                        e
                         )
-                raise
+                try:
+                    self._local_connect(shot_number, tree_name)
+                except Exception as e:
+                    # Neither connection type succeeded. Raise the exception
+                    self.is_remote_connection = None  # reset the flag
+                    logging.exception(
+                            "An error occurred while attempting to connect to"
+                            " `%s`: `%s`",
+                            server_name,
+                            e
+                            )
 
     def _local_connect(self, shot_number, tree_name):
         """
-        Locally connect to the MDSplus database.
+        Open a local MDSplus tree database.
 
         Parameters
         ----------
@@ -76,11 +93,11 @@ class MDSPlusConnection(ABC):
         """
         self.is_remote_connection = False
         
-        tree = mds.Tree(tree_name, shot_number) # open tree for given shot
+        tree = mds.Tree(tree_name, shot_number)
 
     def _remote_connect(self, shot_number, tree_name, server_name):
         """
-        Remotely connect to the MDSplus database.
+        Open a remote MDSplus tree database.
 
         Parameters
         ----------
@@ -93,5 +110,5 @@ class MDSPlusConnection(ABC):
         """
         self.is_remote_connection = True
 
-        conn = mds.Connection(server_name) # connect to given server
-        tree = conn.openTree(tree_name, shot_number) # open tree for given shot
+        conn = mds.Connection(server_name)
+        tree = conn.openTree(tree_name, shot_number)
