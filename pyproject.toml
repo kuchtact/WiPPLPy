@@ -11,14 +11,14 @@ description = "Python package for the Wisconsin Plasma Physics Laboratory"
 dynamic = [
   "version",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
-  "numpy >= 1.22.0",
+  "numpy >= 1.24.0",
 ]
 [project.optional-dependencies]
 tests = [
-  "pytest >= 7.0.0",
-  "tox >= 4.3.1",
+  "pytest >= 8.0.0",
+  "nox >= 2024.4.15",
 ]
 
 [tool.codespell]
@@ -28,7 +28,7 @@ ned,
 tru"""
 
 [tool.ruff]
-target-version = "py39"
+target-version = "py310"
 extend-select = [
   "A", # flake8-builtins
   "C4", # flake8-comprehensions
