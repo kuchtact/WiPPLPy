@@ -235,6 +235,14 @@ then we need to create an environment for running the code in.
    If there are no errors then the installation was successful.
 
 
+Installing WiscVPN for Remote Data Access
+-----------------------------------------
+
+To access data remotely, you will need to have access to the UW-Madison Plasma 
+Network. This can be done by `installing WiscVPN`_ and getting your static IP
+address added to the network.
+
+
 Creating Documentation
 ======================
 
@@ -274,4 +282,5 @@ Open the documentation by double clicking on the :file:`index.html` file in the
 .. _GitHub: https://github.com
 .. _WiPPLPy repository: https://github.com/kuchtact/WiPPLPy
 .. _PlasmaPy's code contribution workflow: https://docs.plasmapy.org/en/stable/contributing/workflow.html
+.. _installing WiscVPN: https://it.wisc.edu/services/wiscvpn/
 
