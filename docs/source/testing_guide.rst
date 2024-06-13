@@ -195,12 +195,12 @@ Floating point comparisons
 
 In order to avoid these difficulties, use
 `numpy.testing.assert_allclose` when comparing floating point numbers
-and arrays. The ``rtol`` keyword sets the acceptable relative tolerance. 
-The value of ``rtol`` should be set ∼1–2 orders of magnitude greater 
-than the expected relative uncertainty. For mathematical functions, a 
-value of ``rtol=1e-14`` is often appropriate. For quantities that depend 
-on physical constants, a value between ``rtol=1e-8`` and ``rtol=1e-5`` 
-may be required, depending on how much the accepted values for 
+and arrays. The ``rtol`` keyword sets the acceptable relative tolerance.
+The value of ``rtol`` should be set ∼1–2 orders of magnitude greater
+than the expected relative uncertainty. For mathematical functions, a
+value of ``rtol=1e-14`` is often appropriate. For quantities that depend
+on physical constants, a value between ``rtol=1e-8`` and ``rtol=1e-5``
+may be required, depending on how much the accepted values for
 fundamental constants are likely to change.
 
 Testing warnings and exceptions

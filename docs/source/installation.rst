@@ -240,7 +240,7 @@ then we need to create an environment for running the code in.
 Installing WiscVPN for Remote Data Access
 -----------------------------------------
 
-To access data remotely, you will need to have access to the UW-Madison Plasma 
+To access data remotely, you will need to have access to the UW-Madison Plasma
 Network. This can be done by `installing WiscVPN`_ and getting your static IP
 address added to the network.
 
