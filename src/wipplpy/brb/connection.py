@@ -28,7 +28,7 @@ class BRBConnection(MDSPlusConnection):
         shot_number : `int`
             The shot number from which to extract MDSplus data.
         """
-        self.make_connection(
+        self._local_and_remote_connection(
                 shot_number,
                 self.config_reader.BRB_tree,
                 self.config_reader.BRB_remote_server
