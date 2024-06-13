@@ -311,7 +311,7 @@ functions or pass in tuples containing inputs and expected values.
        assert proof_by_riemann(truth_value) == expected
 
 Test parametrization with argument unpacking
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------
 
 When the number of arguments passed to a function varies, we can use
 argument unpacking_ in conjunction with test parametrization.
@@ -329,7 +329,7 @@ positional arguments (``a`` and ``b``) and one optional keyword argument
 
 .. hint::
 
-   This function uses |type hint annotations| to indicate that ``a`` and
+   This function uses `type hint annotations`_ to indicate that ``a`` and
    ``b`` can be either a `float` or `str`, `reverse_order`
    should be a `bool`, and `add` should return a `float` or
    `str`.
@@ -373,7 +373,7 @@ and unpacking_ them inside of the test function.
 
 .. hint::
 
-   This function uses |type hint annotations| to indicate that ``args``
+   This function uses `type hint annotations`_ to indicate that ``args``
    should be a `list` containing `str` objects, ``kwargs`` should be a
    `dict` containing `str` objects that map to `bool` objects,
    ``expected`` should be a `str`, and that there should be no
@@ -521,7 +521,7 @@ Running tests
 
 WiPPLPy's tests can be run in the following ways:
 
-1. Creating and updating a pull request on |GitHub|.
+1. Creating and updating a pull request on `GitHub`_.
 2. Running `pytest` from the command line.
 3. Running `Nox`_ from the command line.
 4. Running tests from an `integrated development environment
@@ -540,9 +540,9 @@ Using GitHub
 
 The recommended way for new contributors to run WiPPLPy's full test
 suite is to `create a pull request`_ from your development branch to
-|WiPPLPy's GitHub repository|. The test suite will be run
+`WiPPLPy's GitHub repository`_. The test suite will be run
 automatically when the pull request is created and every time changes
-are pushed to the development branch on |GitHub|. Most of these checks
+are pushed to the development branch on `GitHub`_. Most of these checks
 have been automated using `GitHub Actions`_.
 
 The following image shows how the results of the checks will appear in
@@ -570,7 +570,7 @@ The following checks are performed with each pull request.
      messages.
 
 * The **CI / Documentation (pull_request)** check verifies that
-  |PlasmaPy's documentation| is able to build correctly from the pull
+  WiPPLPy's documentation is able to build correctly from the pull
   request. Warnings are treated as errors.
 
 * The **docs/readthedocs.org:plasmapy** check allows us to preview
@@ -595,11 +595,11 @@ The following checks are performed with each pull request.
 * The **CI / Importing PlasmaPy (pull_request)** checks that it is
   possible to run `import plasmapy`.
 
-* PlasmaPy uses |black| to format code and |isort| to sort ``import``
+* PlasmaPy uses `black`_ to format code and `isort`_ to sort ``import``
   statements. The **CI / Linters (pull_request)** and
   **pre-commit.ci - pr** checks verify that the pull request meets these
   style requirements. These checks will fail when inconsistencies with
-  the output from |black| or |isort| are found or when there are syntax
+  the output from `black`_ or `isort`_ are found or when there are syntax
   errors. These checks can usually be ignored until the pull request is
   nearing completion.
 
@@ -624,7 +624,7 @@ The following checks are performed with each pull request.
   made.
 
 * The **Pull Request Labeler / triage (pull_request_target)** check
-  applies appropriate |GitHub| labels to pull requests.
+  applies appropriate `GitHub`_ labels to pull requests.
 
 .. note::
 
@@ -699,7 +699,7 @@ flags you can use with it:
 Using Nox
 ---------
 
-PlasmaPy's continuous integration checks on |GitHub| are typically run
+PlasmaPy's continuous integration checks on `GitHub`_ are typically run
 using `Nox`_, a Python tool for automating tasks such as running software
 tests, building documentation, and performing other checks. Using `Nox`_
 simplifies testing PlasmaPy with different releases of Python, with
@@ -710,7 +710,7 @@ ensures that tests are run the same way as in CI.
 
 .. tip::
 
-   Installing |uv| alongside `Nox`_ leads to significantly faster
+   Installing `uv`_ alongside `Nox`_ leads to significantly faster
    dependency resolution and improved caching.
 
 To run PlasmaPy's tests (except for those marked as slow), run:
@@ -735,7 +735,7 @@ where ``<session>`` is replaced with the name of the `Nox`_ session. The
 quotes are only needed if ``<session>`` contains special characters like
 parentheses.
 
-For example, static type checking with |mypy| can be run locally with
+For example, static type checking with `mypy`_ can be run locally with
 
 .. code-block:: console
 
@@ -863,3 +863,10 @@ popular IDEs:
 .. _`Visual Studio`: https://visualstudio.microsoft.com
 .. _`Nox`: https://nox.thea.codes
 .. _`GitHub Actions`: https://docs.github.com/en/actions
+.. _`type hint annotations`: https://peps.python.org/pep-0484
+.. _`GitHub`: https://github.com
+.. _`WiPPLPy's GitHub repository`: https://github.com/kuchtact/WiPPLPy
+.. _`black`: https://black.readthedocs.io
+.. _`isort`: https://pycqa.github.io/isort
+.. _`uv`: https://github.com/astral-sh/uv
+.. _`mypy`: https://mypy.readthedocs.io
