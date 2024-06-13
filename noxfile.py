@@ -18,7 +18,7 @@ def tests(session):
 
 
 @nox.session(python=maxpython)
-def build_docs(session):
+def docs(session):
     """Build documentation with Sphinx."""
     session.install("sphinx")
     session.run("sphinx-build", "-b", "html", "docs/source/", "docs/build/")
