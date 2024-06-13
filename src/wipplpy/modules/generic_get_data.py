@@ -545,31 +545,46 @@ class Data:
                 )
             self.saved_calls[save_name] = data
 
-        self.to_xarray(data, xarray_args=xarray_args, xarray_kwargs=xarray_kwargs)
+        return data
     
-    def gather_to_xarray(self, path):
+    def gather_DataArray(self, node, dim_names):
         """
         Package data along with dimensions and attributes into an xarray DataArray. Pulls data from MDSPlus or local files.
+        
+        Parameters
+        ----------
+        node : str
+            MDSPlus node for the wanted data. 
+
+        Returns
+        -------
+        array : xr.DataArray
+            DataArray with stored data and metadata
+        
         """
         #get data first as numpy array
-        #get dimensions of array
-        #   spatial ()
-        #   time (add sampling rate as attribute, might be unnecessary)
+        data = node.data()
+        ndim = data.ndim 
+        if ndim != len(dim_names): raise Exception("Number of dimension names and dimenion of data do not match")
+
+        coords = {}
+        #dim_units = {}
+        for dim in range(ndim):
+            coords[dim_names[dim]] = data.dim_of(dim).data()
+            
         #get coordinates for dimensions that need it
         #units on dimensions (is this stored as an attribute of the array or of the coord)
-        #fill in attributes (e.g. machine, maybe port info)
-        #
-        #data = get(path)
-        #
+        #fill in attributes 
+        #maybe summary info like average Ip, ne, Bt, q (what would be some equivalent things for BRB? ) but what would be the resource cost for this?
+        #maybe main contact person + their email for the diagnostic
         #data_array = xr.DataArray(data)
-        #any other additions to the DataArray
         #self.data = data_array
         pass
 
-    def package_as_DataSet(self, path_list):
+    def package_DataSet(self, path_list):
         '''
         Gather and combine multiple xarray DataArrays into a single DataSet. May
-        have multiple calls to gather_to_xarray, or maybe can also pass in DataArrays
+        have multiple calls to gather_to_DataArray. Could also be passed DataArrays
         explicitly which have already been put together.
         '''
         pass
