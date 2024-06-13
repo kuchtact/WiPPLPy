@@ -79,6 +79,7 @@ class MDSPlusConnection(ABC):
                             server_name,
                             e
                             )
+                    raise
 
     def _local_connect(self, shot_number, tree_name):
         """
