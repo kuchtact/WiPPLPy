@@ -1,5 +1,5 @@
 """
-Create the BRBConnection() class for making BRB-MDSplus connection requests.
+Create objects pertaining to accessing databases for the BRB device.
 """
 
 from WiPPLPy.modules.config_reader import ConfigReader
@@ -7,9 +7,12 @@ from WiPPLPy.modules.connection import MDSPlusConnection
 
 
 class BRBConnection(MDSPlusConnection):
+    """
+    Open the BRB-MDSplus database for a given shot number.
+    """
     def __init__(self, config_reader = ConfigReader()):
         """
-        Initialize BRB-relevant objects necessary for connecting to MDSplus.
+        Initialize class attributes.
 
         Parameters
         ----------
