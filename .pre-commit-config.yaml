@@ -8,6 +8,7 @@ repos:
   rev: v4.6.0
   hooks:
   - id: check-ast
+    name: check abstract syntax tree
   - id: check-merge-conflict
     exclude: .*\.rst
   - id: check-case-conflict
@@ -31,12 +32,6 @@ repos:
   rev: v1.5.5
   hooks:
   - id: remove-crlf
-
-- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.13.0
-  hooks:
-  - id: pretty-format-ini
-    args: [--autofix]
 
 - repo: https://github.com/MarcoGorelli/absolufy-imports
   rev: v0.3.1
@@ -63,8 +58,9 @@ repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.4.8
   hooks:
-  - id: ruff
+  - id: ruff (see https://docs.astral.sh/ruff/rules)
     args: [--fix]
+  - id: ruff-format
 
 - repo: https://github.com/PyCQA/isort
   rev: 5.13.2
@@ -77,15 +73,15 @@ repos:
     types:
     - python
 
-- repo: https://github.com/psf/black
-  rev: 24.4.2
-  hooks:
-  - id: black
-
 - repo: https://github.com/asottile/blacken-docs
   rev: 1.16.0
   hooks:
   - id: blacken-docs
+
+- repo: https://github.com/sphinx-contrib/sphinx-lint
+  rev: v0.9.1
+  hooks:
+  - id: sphinx-lint
 
 - repo: https://github.com/nbQA-dev/nbQA
   rev: 1.8.5
