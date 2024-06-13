@@ -24,6 +24,7 @@ tests = [
 [tool.codespell]
 skip = "*.png"
 ignore-words-list = """
+tru
 ned"""
 
 [tool.ruff]
