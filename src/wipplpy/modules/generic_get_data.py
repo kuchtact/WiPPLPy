@@ -577,8 +577,9 @@ class Data:
         #fill in attributes 
         #maybe summary info like average Ip, ne, Bt, q (what would be some equivalent things for BRB? ) but what would be the resource cost for this?
         #maybe main contact person + their email for the diagnostic
-        #data_array = xr.DataArray(data)
-        #self.data = data_array
+
+        data_array = xr.DataArray(data, dims = dim_names, coords = coords)
+        self.data = data_array
         pass
 
     def package_DataSet(self, path_list):
