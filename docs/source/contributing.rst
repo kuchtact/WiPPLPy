@@ -12,8 +12,8 @@ Contributing
 Introduction
 ============
 
-We follow the same design as PlasmaPy for contributing. Please see the `PlasmaPy 
-contributing workflow guide <https://docs.plasmapy.org/en/stable/contributing/workflow.html>`_ 
+We follow the same design as PlasmaPy for contributing. Please see the `PlasmaPy
+contributing workflow guide <https://docs.plasmapy.org/en/stable/contributing/workflow.html>`_
 for more information.
 
 This page describes the workflow for making a contribution to WiPPLPy
@@ -89,8 +89,8 @@ Create a new branch
 
       git push --set-upstream origin new-branch-name
 
-#. If you previously ran ``git stash`` and want to apply those changes to 
-   the new branch, run ``git stash pop`` to restore the changes onto the 
+#. If you previously ran ``git stash`` and want to apply those changes to
+   the new branch, run ``git stash pop`` to restore the changes onto the
    new branch.
 
 .. _commit-changes:
