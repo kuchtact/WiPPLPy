@@ -1,7 +1,7 @@
 import nox
 
 
-supported_python_versions = ("3.10", "3.11", "3.12")
+supported_python_versions = ("3.9", "3.10", "3.11", "3.12")
 maxpython = max(supported_python_versions)
 
 # Set the default backend to conda if available, because it is probably
