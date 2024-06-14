@@ -11,7 +11,7 @@ description = "Python package for the Wisconsin Plasma Physics Laboratory"
 dynamic = [
   "version",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
   "numpy >= 1.24.0",
 ]
