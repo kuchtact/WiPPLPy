@@ -28,7 +28,7 @@ ned,
 tru"""
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py39"
 extend-select = [
   "A", # flake8-builtins
   "C4", # flake8-comprehensions
