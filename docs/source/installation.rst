@@ -180,12 +180,21 @@ then we need to create an environment for running the code in.
       In Windows, the directory path will be :file:`C:\\Users\\<username>\\repos\\WiPPLPy`.
 
 #. Create a Mamba_ environment using the packages from
-   :file:`mamba_environment.yml`. If you are on a computer that does not use
-   the Mac silicon processor you can do so by running
+   :file:`mamba_environment.yml`. If you are on a Windows computer (even if you
+   are using WSL) or Mac computer that doesn't use the silicon processor you
+   can do so by running:
 
    .. code-block:: bash
 
       mamba env create -f ./mamba_environment.yml
+
+   If you are on a Linux computer then you need to install MDSplus separately by running:
+
+   .. code-block:: bash
+
+      mamba env create -f ./mamba_environment_linux.yml
+      mamba activate WiPPLPy
+      mamba install mdsplus
 
    If you are on a computer that uses the Mac silicon processor you can do so by
 
@@ -259,6 +268,11 @@ running the following command::
 This will create the documentation in the :file:`docs/build/html/` directory.
 Open the documentation by double clicking on the :file:`index.html` file in the
 :file:`docs/build/html/` directory.
+
+Installing Pre-commit
+=====================
+
+Follow the instruction found here: https://docs.plasmapy.org/en/stable/contributing/pre-commit.html
 
 .. _Sphinx: https://www.sphinx-doc.org/en/master/usage/installation.html
 .. _make: https://www.gnu.org/software/make/
