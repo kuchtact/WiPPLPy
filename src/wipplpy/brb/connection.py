@@ -10,7 +10,8 @@ class BRBConnection(MDSPlusConnection):
     """
     Open the BRB-MDSplus database for a given shot number.
     """
-    def __init__(self, config_reader = ConfigReader()):
+
+    def __init__(self, config_reader=ConfigReader()):
         """
         Initialize class attributes.
 
@@ -32,7 +33,7 @@ class BRBConnection(MDSPlusConnection):
             The shot number from which to extract MDSplus data.
         """
         self._local_and_remote_connection(
-                shot_number,
-                self.config_reader.BRB_tree,
-                self.config_reader.BRB_remote_server
-                )
+            shot_number,
+            self.config_reader.BRB_tree,
+            self.config_reader.BRB_remote_server,
+        )

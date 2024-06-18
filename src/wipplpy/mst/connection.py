@@ -2,8 +2,9 @@
 Create objects pertaining to accessing databases for the MST device.
 """
 
-from datetime import date
+import logging
 import math
+from datetime import date
 
 from WiPPLPy.modules.config_reader import ConfigReader
 from WiPPLPy.modules.connection import MDSPlusConnection
@@ -13,7 +14,8 @@ class MSTConnection(MDSPlusConnection):
     """
     Open the MST-MDSplus database for a given shot number.
     """
-    def __init__(self, config_reader = ConfigReader()):
+
+    def __init__(self, config_reader=ConfigReader()):
         """
         Initialize class attributes.
 
@@ -50,7 +52,7 @@ class MSTConnection(MDSPlusConnection):
         # Prepare the date in MST's shot syntax
         date_today = date.today()
         millenium_index = math.floor(date_today.year / 1000) - 1
-        date_mst_syntax = millenium_index + date_today.strftime('%y%m%d')
+        date_mst_syntax = millenium_index + date_today.strftime("%y%m%d")
 
         shot_string = str(shot_number)
 
@@ -60,15 +62,13 @@ class MSTConnection(MDSPlusConnection):
         else:
             server_name = self.config_reader.MST_past_data_server
         logging.debug(
-                "Shot `%s` data is stored on the `%s` server.",
-                shot_string,
-                server_name
-                )
+            "Shot `%s` data is stored on the `%s` server.", shot_string, server_name
+        )
 
         return server_name
 
     def make_connection(self, shot_number):
-        """ 
+        """
         Establish an MDSplus connection to the appropriate MST data server.
 
         Parameters
@@ -77,7 +77,5 @@ class MSTConnection(MDSPlusConnection):
             The shot number from which to extract MDSplus data.
         """
         self._local_and_remote_connection(
-                shot_number, 
-                self.config_reader.MST_tree,
-                self.data_location(shot_number)
-                )
+            shot_number, self.config_reader.MST_tree, self.data_location(shot_number)
+        )
