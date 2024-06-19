@@ -2,7 +2,7 @@
 Create objects pertaining to accessing databases for the BRB device.
 """
 
-from WiPPLPy.modules.config_reader import ConfigReader
+from WiPPLPy.modules.config_reader import MDSplusConfigReader
 from WiPPLPy.modules.connection import MDSPlusConnection
 
 
@@ -11,13 +11,13 @@ class BRBConnection(MDSPlusConnection):
     Open the BRB-MDSplus database for a given shot number.
     """
 
-    def __init__(self, config_reader=ConfigReader()):
+    def __init__(self, config_reader=MDSplusConfigReader()):
         """
         Initialize class attributes.
 
         Parameters
         ----------
-        config_reader : `WiPPLPy.modules.config_reader.ConfigReader`
+        config_reader : `WiPPLPy.modules.config_reader.MDSplusConfigReader`
             Class object that reads from the INI file containing MDSplus
             labels.
         """

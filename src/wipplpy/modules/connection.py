@@ -1,7 +1,5 @@
 """
 Define generic objects for accessing WiPPL devices' databases.
-
-TODO: Add a MySQL connection and maybe other connection types as well?
 """
 
 import logging
@@ -17,7 +15,7 @@ class MDSPlusConnection(ABC):
     """
 
     def __init__(self):
-        self.is_remote_connection = None  # track when remote conn. is made
+        self.connection_is_remote = None
 
     @abstractmethod
     def make_connection(self, shot_number):
@@ -40,22 +38,20 @@ class MDSPlusConnection(ABC):
         local_server = socket.gethostname()
         if local_server == server_name:
             try:
-                self._local_connect(shot_number, tree_name)
+                self._local_connect(shot_number, tree_name, server_name)
             except Exception as e:
-                # Local connection failed. Try a remote conn. for completeness
-                logging.debug(
+                logging.warning(
                     "Failed attempted local connection: `%s`\nTrying a"
-                    " remote connection.",
+                    " remote connection ...",
                     e,
                 )
                 try:
                     self._remote_connect(shot_number, tree_name, server_name)
                 except Exception as e:
-                    # Neither connection type succeeded. Raise the exception
-                    self.is_remote_connection = None  # reset the flag
+                    self.connection_is_remote = None  # reset the flag
                     logging.exception(
-                        "An error occurred while attempting to connect to"
-                        " `%s`: `%s`",
+                        "Error -- unable to locally or remotely connect to `%s`"
+                        ": `%s`",
                         server_name,
                         e,
                     )
@@ -65,26 +61,24 @@ class MDSPlusConnection(ABC):
             try:
                 self._remote_connect(shot_number, tree_name, server_name)
             except Exception as e:
-                # Remote connection failed. Try a local conn. for completeness
-                logging.debug(
+                logging.warning(
                     "Failed attempted remote connection: `%s`\nTrying a"
-                    " local connection.",
+                    " local connection ...",
                     e,
                 )
                 try:
-                    self._local_connect(shot_number, tree_name)
+                    self._local_connect(shot_number, tree_name, server_name)
                 except Exception as e:
-                    # Neither connection type succeeded. Raise the exception
-                    self.is_remote_connection = None  # reset the flag
+                    self.connection_is_remote = None  # reset the flag
                     logging.exception(
-                        "An error occurred while attempting to connect to"
-                        " `%s`: `%s`",
+                        "Error -- unable to locally or remotely connect to `%s`"
+                        ": `%s`",
                         server_name,
                         e,
                     )
                     raise
 
-    def _local_connect(self, shot_number, tree_name):
+    def _local_connect(self, shot_number, tree_name, server_name):
         """
         Open a local MDSplus tree database.
 
@@ -94,9 +88,15 @@ class MDSPlusConnection(ABC):
             The shot number from which to extract MDSplus data.
         tree_name : `str`
             String representing the tree name of the device's MDSplus database.
+        server_name : `str`
+            String representing the server in which the shot's data is located.
         """
-        self.is_remote_connection = False
+        self.connection_is_remote = False
 
+        logging.debug(
+                "Attempting a local connection to `%s` ...",
+                server_name
+        )
         self.tree = mds.Tree(tree_name, shot_number)
 
     def _remote_connect(self, shot_number, tree_name, server_name):
@@ -112,7 +112,13 @@ class MDSPlusConnection(ABC):
         server_name : `str`
             String representing the server in which the shot's data is located.
         """
-        self.is_remote_connection = True
+        self.connection_is_remote = True
 
+        logging.debug(
+                "Attempting a remote connection to `%s` ...\nIf it is taking"
+                " too long to connect, double-check that you are using your"
+                " WiscVPN static IP address.",
+                server_name
+        )
         self.tree = mds.Connection(server_name)
         self.tree.openTree(tree_name, shot_number)

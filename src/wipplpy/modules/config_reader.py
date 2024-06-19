@@ -10,10 +10,23 @@ import os
 from WiPPLPy.modules.generic_get_data import lazy_get
 
 
-class ConfigReader:
+class MDSplusConfigReader:
     """
     Access the local INI file containing relevant MDSplus labels and define
     methods for referring to each label.
+
+    Methods
+    -------
+    BRB_remote_server
+        Returns the BRB-MDSplus server name.
+    BRB_tree
+        Returns the BRB-MDSplus tree name.
+    MST_runday_data_server
+        Returns the MST-MDSplus server name featuring run-day data.
+    MST_past_data_server
+        Returns the MST-MDSplus server name featuring past days' data.
+    MST_tree
+        Returns the MST-MDSplus tree name.
     """
 
     def __init__(self, config_filepath=None):
@@ -22,8 +35,10 @@ class ConfigReader:
 
         Parameters
         ----------
-        config_filepath : `str`
-            The path name of the INI file.
+        config_filepath : `str`, default=None
+            The filepath of the INI file, with the default corresponding to the 
+            '../../../../mdsplus_config.ini' file located relative to this file
+            ('config_parser.py').
         """
         self.config_filepath = config_filepath
         self.config = configparser.ConfigParser()
@@ -32,7 +47,9 @@ class ConfigReader:
             # Locate the standard INI file relative to this file's location
             this_file_directory = os.path.dirname(os.path.abspath(__file__))
             ini_file_path = os.path.abspath(
-                os.path.join(this_file_directory, "../../../mdsplus_config.ini")
+                os.path.join(
+                    this_file_directory, "../../../../mdsplus_config.ini"
+                )
             )
             self.config_filepath = ini_file_path  # pass string path to argument
 
