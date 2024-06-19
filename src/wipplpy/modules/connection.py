@@ -38,7 +38,7 @@ class MDSPlusConnection(ABC):
         local_server = socket.gethostname()
         if local_server == server_name:
             try:
-                self._local_connect(shot_number, tree_name, server_name)
+                self._local_connect(shot_number, tree_name)
             except Exception as e:
                 logging.warning(
                     "Failed attempted local connection: `%s`\nTrying a"
@@ -67,7 +67,7 @@ class MDSPlusConnection(ABC):
                     e,
                 )
                 try:
-                    self._local_connect(shot_number, tree_name, server_name)
+                    self._local_connect(shot_number, tree_name)
                 except Exception as e:
                     self.connection_is_remote = None  # reset the flag
                     logging.exception(
@@ -78,7 +78,7 @@ class MDSPlusConnection(ABC):
                     )
                     raise
 
-    def _local_connect(self, shot_number, tree_name, server_name):
+    def _local_connect(self, shot_number, tree_name):
         """
         Open a local MDSplus tree database.
 
@@ -88,14 +88,13 @@ class MDSPlusConnection(ABC):
             The shot number from which to extract MDSplus data.
         tree_name : `str`
             String representing the tree name of the device's MDSplus database.
-        server_name : `str`
-            String representing the server in which the shot's data is located.
         """
         self.connection_is_remote = False
 
         logging.debug(
-                "Attempting a local connection to `%s` ...",
-                server_name
+                "Attempting a local connection to shot `%s` in the `%s` tree ...",
+                shot_number,
+                tree_name
         )
         self.tree = mds.Tree(tree_name, shot_number)
 
