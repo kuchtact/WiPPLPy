@@ -257,13 +257,11 @@ address added to the network.
 Creating Documentation
 ======================
 
-To create the documentation, you will need to have `Sphinx`_ installed and
-`make`_. This should have already been installed when you created your Mamba environment.
+To create the documentation, you will need to have `nox`_ installed. `nox`_
+then installs `Sphinx`_ and creates the documentation when you run the
+following command::
 
-Then, you can create the documentation by entering the ``docs/`` directory and
-running the following command::
-
-    make html
+    nox -s docs
 
 This will create the documentation in the :file:`docs/build/html/` directory.
 Open the documentation by double clicking on the :file:`index.html` file in the
@@ -275,7 +273,7 @@ Installing Pre-commit
 Follow the instruction found here: https://docs.plasmapy.org/en/stable/contributing/pre-commit.html
 
 .. _Sphinx: https://www.sphinx-doc.org/en/master/usage/installation.html
-.. _make: https://www.gnu.org/software/make/
+.. _`nox`: https://nox.thea.codes
 .. _Add a new SSH key to your GitHub account: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
 .. _clone: https://github.com/git-guides/git-clone
 .. _Conda: https://docs.conda.io
