@@ -13,7 +13,7 @@ nox.options.default_venv_backend = "conda|uv|virtualenv"
 def tests(session):
     """Run tests with pytest."""
     session.install(".")
-    session.run(pytest)
+    session.run("pytest")
 
 
 @nox.session(python=maxpython)
