@@ -36,7 +36,7 @@ class MDSplusConfigReader:
         Parameters
         ----------
         config_filepath : `str`, default=None
-            The filepath of the INI file, with the default corresponding to the 
+            The filepath of the INI file, with the default corresponding to the
             '../../../../mdsplus_config.ini' file located relative to this file
             ('config_parser.py').
         """
@@ -47,9 +47,7 @@ class MDSplusConfigReader:
             # Locate the standard INI file relative to this file's location
             this_file_directory = os.path.dirname(os.path.abspath(__file__))
             ini_file_path = os.path.abspath(
-                os.path.join(
-                    this_file_directory, "../../../../mdsplus_config.ini"
-                )
+                os.path.join(this_file_directory, "../../../../mdsplus_config.ini")
             )
             self.config_filepath = ini_file_path  # pass string path to argument
 
