@@ -92,9 +92,9 @@ class MDSPlusConnection(ABC):
         self.connection_is_remote = False
 
         logging.debug(
-                "Attempting a local connection to shot `%s` in the `%s` tree ...",
-                shot_number,
-                tree_name
+            "Attempting a local connection to shot `%s` in the `%s` tree ...",
+            shot_number,
+            tree_name,
         )
         self.tree = mds.Tree(tree_name, shot_number)
 
@@ -114,10 +114,10 @@ class MDSPlusConnection(ABC):
         self.connection_is_remote = True
 
         logging.debug(
-                "Attempting a remote connection to `%s` ...\nIf it is taking"
-                " too long to connect, double-check that you are using your"
-                " WiscVPN static IP address.",
-                server_name
+            "Attempting a remote connection to `%s` ...\nIf it is taking"
+            " too long to connect, double-check that you are using your"
+            " WiscVPN static IP address.",
+            server_name,
         )
         self.tree = mds.Connection(server_name)
         self.tree.openTree(tree_name, shot_number)
