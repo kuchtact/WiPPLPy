@@ -8,6 +8,7 @@ WiPPLPy
    Code Overview <code_overview>
    installation
    contributing
+   testing_guide
 
 Indices and tables
 ==================
