@@ -180,12 +180,21 @@ then we need to create an environment for running the code in.
       In Windows, the directory path will be :file:`C:\\Users\\<username>\\repos\\WiPPLPy`.
 
 #. Create a Mamba_ environment using the packages from
-   :file:`mamba_environment.yml`. If you are on a computer that does not use
-   the Mac silicon processor you can do so by running
+   :file:`mamba_environment.yml`. If you are on a Windows computer (even if you
+   are using WSL) or Mac computer that doesn't use the silicon processor you
+   can do so by running:
 
    .. code-block:: bash
 
       mamba env create -f ./mamba_environment.yml
+
+   If you are on a Linux computer then you need to install MDSplus separately by running:
+
+   .. code-block:: bash
+
+      mamba env create -f ./mamba_environment_linux.yml
+      mamba activate WiPPLPy
+      mamba install mdsplus
 
    If you are on a computer that uses the Mac silicon processor you can do so by
 
@@ -237,23 +246,34 @@ then we need to create an environment for running the code in.
    If there are no errors then the installation was successful.
 
 
+Installing WiscVPN for Remote Data Access
+-----------------------------------------
+
+To access data remotely, you will need to have access to the UW-Madison Plasma
+Network. This can be done by `installing WiscVPN`_ and getting your static IP
+address added to the network.
+
+
 Creating Documentation
 ======================
 
-To create the documentation, you will need to have `Sphinx`_ installed and
-`make`_. This should have already been installed when you created your Mamba environment.
+To create the documentation, you will need to have `nox`_ installed. `nox`_
+then installs `Sphinx`_ and creates the documentation when you run the
+following command::
 
-Then, you can create the documentation by entering the ``docs/`` directory and
-running the following command::
-
-    make html
+    nox -s docs
 
 This will create the documentation in the :file:`docs/build/html/` directory.
 Open the documentation by double clicking on the :file:`index.html` file in the
 :file:`docs/build/html/` directory.
 
+Installing Pre-commit
+=====================
+
+Follow the instruction found here: https://docs.plasmapy.org/en/stable/contributing/pre-commit.html
+
 .. _Sphinx: https://www.sphinx-doc.org/en/master/usage/installation.html
-.. _make: https://www.gnu.org/software/make/
+.. _`nox`: https://nox.thea.codes
 .. _Add a new SSH key to your GitHub account: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
 .. _clone: https://github.com/git-guides/git-clone
 .. _Conda: https://docs.conda.io
@@ -276,3 +296,4 @@ Open the documentation by double clicking on the :file:`index.html` file in the
 .. _GitHub: https://github.com
 .. _WiPPLPy repository: https://github.com/kuchtact/WiPPLPy
 .. _PlasmaPy's code contribution workflow: https://docs.plasmapy.org/en/stable/contributing/workflow.html
+.. _installing WiscVPN: https://it.wisc.edu/services/wiscvpn/
