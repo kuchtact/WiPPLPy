@@ -23,10 +23,10 @@ jobs:
       matrix:
         include:
 
-        - name: Tests, Python 3.12, Ubuntu
+        - name: Tests, Python 3.9, Ubuntu
           os: ubuntu-latest
-          python: '3.12'
-          nox_session: tests-3.12
+          python: '3.9'
+          nox_session: tests-3.9
 
         - name: Tests, Python 3.11, macOS
           os: macos-latest
