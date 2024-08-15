@@ -6,7 +6,7 @@ maxpython = max(supported_python_versions)
 # Set the default backend to conda if available, because it is probably
 # needed to install MDSplus installation anyway. The next choice is uv
 # because it has excellent performance when resolving requirements.
-nox.options.default_venv_backend = "mamba|conda|uv|virtualenv"
+nox.options.default_venv_backend = "mamba|conda"
 
 
 def install_environment(session, environment_path="mamba_environment.yml"):
