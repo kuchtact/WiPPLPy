@@ -62,7 +62,9 @@ jobs:
           cache: pip
 
       - name: Install mamba
-        uses: conda-incubator/setup-miniconda@v2
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-version: 'latest'
 
       - name: Install Python dependencies
         run: python -m pip install --progress-bar off --upgrade nox
