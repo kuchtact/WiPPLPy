@@ -249,7 +249,7 @@ Test independence and parametrization
 -------------------------------------
 
 In this section, we'll discuss the issue of parametrization based on an
-example of a `proof <https://en.wikipedia.org/wiki/Riemann_hypothesis#Excluded_middle>` of
+example of a `proof <https://en.wikipedia.org/wiki/Riemann_hypothesis#Excluded_middle>`_ of
 Gauss's class number conjecture.
 
 The proof goes along these lines:
@@ -449,10 +449,10 @@ balanced with each other rather than absolute principles.
 * **Write code that is easy to test.** Write short functions that do
   exactly one thing with no side effects. Break up long functions into
   multiple functions that are smaller and more focused. Use
-  `pure functions <https://en.wikipedia.org/wiki/Pure_function>` rather than functions that
+  `pure functions <https://en.wikipedia.org/wiki/Pure_function>`_ rather than functions that
   change the underlying state of the system or depend on non-local
-  variables. Use `test-driven development
-  <https://en.wikipedia.org/wiki/Test-driven_development>` and write tests before writing the code to
+  variables. Use `test-driven development <https://en.wikipedia.org/wiki/Test-driven_development>`_
+  and write tests before writing the code to
   be tested. When a section of code is difficult to test, consider
   refactoring_ it to make it easier to test.
 
@@ -750,7 +750,7 @@ PlasmaPy repository, which is the directory containing
 Code coverage
 -------------
 
-`Code coverage <https://en.wikipedia.org/wiki/Code_coverage>` refers to a metric "used to
+`Code coverage <https://en.wikipedia.org/wiki/Code_coverage>`_ refers to a metric "used to
 describe the degree to which the source code of a program is executed
 when a particular test suite runs." The most common code coverage metric
 is line coverage:
