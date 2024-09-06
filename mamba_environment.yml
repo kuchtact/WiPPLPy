@@ -14,3 +14,7 @@ dependencies:
   - configobj
   - pyyaml
   - sphinx
+  - pip
+  - pip:
+    - pytest
+    - nox
