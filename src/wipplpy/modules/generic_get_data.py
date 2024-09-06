@@ -2,6 +2,7 @@ import logging
 import re
 
 import numpy as np
+import xarray as xr
 from MDSplus.connection import Connection, MdsIpException
 from MDSplus.mdsExceptions import MDSplusException, SsSUCCESS
 from scipy.io import loadmat, savemat
@@ -405,7 +406,7 @@ class Data:
         return variable_vals
 
     def get(  # noqa: PLR0912, PLR0915
-        self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True
+        self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True,
     ):
         """
         Get data from the mdsplus tree and change it to the correct type using a get call.
@@ -501,7 +502,7 @@ class Data:
             data = data.astype(np_data_type)
             logging.debug(f"Changed data to type '{np_data_type}'.")
 
-        # Only save calls if the dictionary exists. The dictionary doesn't exist during some stages of initialization so that we don't save incorrect data.
+        # Only save calls if the dictionary exists. Th dictionary doesn't exist during some stages of initialization so that we don't save incorrect data.
         if hasattr(self, "saved_calls"):
             # logging.debug("Adding data from get call with `save_name='{}'` into `saved_calls`.".format(save_name))
             if save_name in self.saved_calls:
@@ -511,6 +512,49 @@ class Data:
             self.saved_calls[save_name] = data
 
         return data
+    
+    def gather_DataArray(self, node, dim_names):
+        """
+        Package data along with dimensions and attributes into an xarray DataArray. Pulls data from MDSPlus or local files.
+        
+        Parameters
+        ----------
+        node : str
+            MDSPlus node for the wanted data. 
+
+        Returns
+        -------
+        array : xr.DataArray
+            DataArray with stored data and metadata
+        
+        """
+        #get data first as numpy array
+        data = node.data()
+        ndim = data.ndim 
+        if ndim != len(dim_names): raise Exception("Number of dimension names and dimenion of data do not match")
+
+        coords = {}
+        #dim_units = {}
+        for dim in range(ndim):
+            coords[dim_names[dim]] = data.dim_of(dim).data()
+            
+        #get coordinates for dimensions that need it
+        #units on dimensions (is this stored as an attribute of the array or of the coord)
+        #fill in attributes 
+        #maybe summary info like average Ip, ne, Bt, q (what would be some equivalent things for BRB? ) but what would be the resource cost for this?
+        #maybe main contact person + their email for the diagnostic
+
+        data_array = xr.DataArray(data, dims = dim_names, coords = coords)
+        self.data = data_array
+        pass
+
+    def package_DataSet(self, path_list):
+        '''
+        Gather and combine multiple xarray DataArrays into a single DataSet. May
+        have multiple calls to gather_to_DataArray. Could also be passed DataArrays
+        explicitly which have already been put together.
+        '''
+        pass
 
     def to_raw_index(self, time_index):
         """
