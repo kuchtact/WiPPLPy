@@ -5,8 +5,9 @@ import numpy as np
 import xarray as xr
 from MDSplus.connection import Connection, MdsIpException
 from MDSplus.mdsExceptions import MDSplusException, SsSUCCESS
-from wipplpy.modules.shot_loader import get_remote_shot_tree 
 from scipy.io import loadmat, savemat
+
+from wipplpy.modules.shot_loader import get_remote_shot_tree
 
 
 # This lazy get property is taken from https://towardsdatascience.com/what-is-lazy-evaluation-in-python-9efb1d3bfed0
@@ -430,7 +431,11 @@ class Data:
         return variable_vals
 
     def get(  # noqa: PLR0912, PLR0915
-        self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True,
+        self,
+        get_call,
+        np_data_type=np.float64,
+        change_data=True,
+        load_from_saved=True,
     ):
         """
         Get data from the mdsplus tree and change it to the correct type using a get call.
@@ -546,49 +551,49 @@ class Data:
             self.saved_calls[save_name] = data
 
         return data
-    
-    def gather_DataArray(self, node, dim_names):
+
+    def gather_data_array(self, node, dimension_names, dimension_units):
         """
         Package data along with dimensions and attributes into an xarray DataArray. Pulls data from MDSPlus or local files.
-        
+
         Parameters
         ----------
         node : str
-            MDSPlus node for the wanted data. 
+            MDSPlus node for the chosen data.
+        dimension_names : list[str]
+            list of human readable dimension names. Should be consistent with WiPPLPy conventions --insert a link here to some info about common WiPPLPy dimensions and conventions
+        dimension_units : list[str]
+            List of dimension units. Should be in a format consistent with astropy.units https://docs.astropy.org/en/stable/units/
 
         Returns
         -------
         array : xr.DataArray
             DataArray with stored data and metadata
-        
+
         """
-        #get data first as numpy array
+        # get data first as numpy array
         data = node.data()
-        ndim = data.ndim 
-        if ndim != len(dim_names): raise Exception("Number of dimension names and dimenion of data do not match")
+        num_dimensions = data.ndim
+        if num_dimensions != len(dimension_names):
+            raise Exception(
+                "Number of dimension names and number of data dimensions do not match"
+            )
 
         coords = {}
-        #dim_units = {}
-        for dim in range(ndim):
-            coords[dim_names[dim]] = data.dim_of(dim).data()
-            
-        #get coordinates for dimensions that need it
-        #units on dimensions (is this stored as an attribute of the array or of the coord)
-        #fill in attributes 
-        #maybe summary info like average Ip, ne, Bt, q (what would be some equivalent things for BRB? ) but what would be the resource cost for this?
-        #maybe main contact person + their email for the diagnostic
+        dimension_units = {}
 
-        data_array = xr.DataArray(data, dims = dim_names, coords = coords)
-        self.data = data_array
-        pass
+        for dim_num, dim_name in dimension_names:
+            coords[dim_name] = data.dim_of(dim_num).data()
+            dimension_units[dim_name] = dimension_units
 
-    def package_DataSet(self, path_list):
-        '''
-        Gather and combine multiple xarray DataArrays into a single DataSet. May
-        have multiple calls to gather_to_DataArray. Could also be passed DataArrays
-        explicitly which have already been put together.
-        '''
-        pass
+        # get coordinates arrays for dimensions that need it
+
+        # get the rest of the attributes together into
+        {"units": dimension_units}
+
+        data_array = xr.DataArray(data, dims=dimension_names, coords=coords)
+
+        return data_array
 
     def to_raw_index(self, time_index):
         """
