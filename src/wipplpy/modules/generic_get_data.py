@@ -5,8 +5,9 @@ import numpy as np
 import xarray as xr
 from MDSplus.connection import Connection, MdsIpException
 from MDSplus.mdsExceptions import MDSplusException, SsSUCCESS
-from wipplpy.modules.shot_loader import get_remote_shot_tree 
 from scipy.io import loadmat, savemat
+
+from wipplpy.modules.shot_loader import get_remote_shot_tree
 
 
 # This lazy get property is taken from https://towardsdatascience.com/what-is-lazy-evaluation-in-python-9efb1d3bfed0
@@ -39,9 +40,7 @@ def lazy_get(function):
     @_lazy_get.deleter
     def _lazy_get(self):
         logging.debug(
-            "Deleting `{}` by setting `{}` of `{}` to `None`.".format(
-                function.__name__, attribute_name, self
-            )
+            f"Deleting `{function.__name__}` by setting `{attribute_name}` of `{self}` to `None`."
         )
         setattr(self, attribute_name, None)
 
@@ -92,20 +91,11 @@ class Get:
         if self.signal:
             if index_range is not None:
                 if sample_period != 1:
-                    return "DATA( {call} )[{start} : {end} : {step}]".format(
-                        call=self.call_string,
-                        start=index_range[0],
-                        end=index_range[1],
-                        step=sample_period,
-                    )
+                    return f"DATA( {self.call_string} )[{index_range[0]} : {index_range[1]} : {sample_period}]"
                 else:
-                    return "DATA( {call} )[{start} : {end}]".format(
-                        call=self.call_string, start=index_range[0], end=index_range[1]
-                    )
+                    return f"DATA( {self.call_string} )[{index_range[0]} : {index_range[1]}]"
             elif sample_period != 1:
-                return "DATA( {call} )[0 : shape( {call} )[0] : {step}]".format(
-                    call=self.call_string, step=sample_period
-                )
+                return f"DATA( {self.call_string} )[0 : shape( {self.call_string} )[0] : {sample_period}]"
             else:
                 return f"DATA( {self.call_string} )"
         else:
@@ -157,9 +147,7 @@ class Data:
         else:
             int_shot_number = int(tree_or_shot_number)
             logging.debug(
-                "Shot number {} (int {}) passed when creating data object. Getting tree connection.".format(
-                    tree_or_shot_number, int_shot_number
-                )
+                f"Shot number {tree_or_shot_number} (int {int_shot_number}) passed when creating data object. Getting tree connection."
             )
             return get_remote_shot_tree(int_shot_number)
 
@@ -236,9 +224,7 @@ class Data:
 
         if len(variable_booleans) != len(get_calls):
             raise ValueError(
-                "variable_booleans and get_calls do not have the same number of elements ({} and {} respectively).".format(
-                    len(variable_booleans), len(get_calls)
-                )
+                f"variable_booleans and get_calls do not have the same number of elements ({len(variable_booleans)} and {len(get_calls)} respectively)."
             )
         elif len(get_calls) == 0:
             logging.info("Did not do any get calls for preloading data into object.")
@@ -250,23 +236,17 @@ class Data:
         self.load_filepath = load_filepath
         if load_filepath is not None:
             logging.debug(
-                "Loading .mat file at path '{}' to be used when loading data.".format(
-                    load_filepath
-                )
+                f"Loading .mat file at path '{load_filepath}' to be used when loading data."
             )
             # Load the matrix and reduce matrix dimension as much as possible.
             try:
                 self.loaded_mat_dict = loadmat(load_filepath, squeeze_me=True)
                 logging.info(
-                    "Loaded file '{}' has the following keys:\n{}".format(
-                        load_filepath, self.loaded_mat_dict.keys()
-                    )
+                    f"Loaded file '{load_filepath}' has the following keys:\n{self.loaded_mat_dict.keys()}"
                 )
             except FileNotFoundError:
                 logging.warning(
-                    "Could not load file '{}' as it does not yet exist. Will call data from database instead.".format(
-                        load_filepath
-                    )
+                    f"Could not load file '{load_filepath}' as it does not yet exist. Will call data from database instead."
                 )
                 self.loaded_mat_dict = None
         else:
@@ -308,16 +288,12 @@ class Data:
         )
         if index_range[0] >= index_range[1]:
             logging.error(
-                "Time range {} was not in the possible data times ({start}, {end}).".format(
-                    time_range, start=self.time[0], end=self.time[-1]
-                )
+                f"Time range {time_range} was not in the possible data times ({self.time[0]}, {self.time[-1]})."
             )
             raise ValueError("Invalid time range {} since no data falls in range.")
 
         logging.debug(
-            "Changed time range {} to index range {} for indexing signal data.".format(
-                time_range, index_range
-            )
+            f"Changed time range {time_range} to index range {index_range} for indexing signal data."
         )
         return index_range
 
@@ -463,17 +439,13 @@ class Data:
         if load_from_saved and hasattr(self, "saved_calls"):
             if save_name in self.saved_calls:
                 logging.debug(
-                    "Loading '{}' from saved calls instead of making new call.".format(
-                        save_name
-                    )
+                    f"Loading '{save_name}' from saved calls instead of making new call."
                 )
                 return self.saved_calls[save_name]
 
             if self.loaded_mat_dict is not None and save_name in self.loaded_mat_dict:
                 logging.debug(
-                    "Loading '{}' from loaded mat file instead of making new call.".format(
-                        save_name
-                    )
+                    f"Loading '{save_name}' from loaded mat file instead of making new call."
                 )
                 self.saved_calls[save_name] = self.loaded_mat_dict[save_name]
                 return self.loaded_mat_dict[save_name]
@@ -496,24 +468,18 @@ class Data:
             except MdsIpException:
                 if not self.silence_error_logging:
                     logging.exception(
-                        "Shot #{}: Error getting data from node using get call '{}'. No data available.".format(
-                            self.shot_number, call_string
-                        )
+                        f"Shot #{self.shot_number}: Error getting data from node using get call '{call_string}'. No data available."
                     )
                 if not self.ignore_errors:
                     logging.exception(
-                        "Shot #{}: Error getting data from node using get call '{}'. No data available.".format(
-                            self.shot_number, call_string
-                        )
+                        f"Shot #{self.shot_number}: Error getting data from node using get call '{call_string}'. No data available."
                     )
                     raise
             except SsSUCCESS:
                 # Sometimes mdsplus raises a 'SsSUCCESS' exception. This may be because the connection object is bad. Thus we need to create a new connection object.
                 if num_tries > max_tries:
                     logging.exception(
-                        "Shot #{}: Error getting data from node using get call '{}'. Exceeded number of attempts ({}). Error was due to 'SsSUCCESS'.".format(
-                            self.shot_number, call_string, max_tries
-                        )
+                        f"Shot #{self.shot_number}: Error getting data from node using get call '{call_string}'. Exceeded number of attempts ({max_tries}). Error was due to 'SsSUCCESS'."
                     )
                     raise
                 else:
@@ -627,9 +593,7 @@ class Data:
         """
         if filepath.strip()[-4:] != ".mat":
             logging.warning(
-                "Saving calls to file {} but this file has no '.mat' extension.".format(
-                    filepath
-                )
+                f"Saving calls to file {filepath} but this file has no '.mat' extension."
             )
 
         if self.loaded_mat_dict is not None:
@@ -661,15 +625,11 @@ class Data:
                 getattr(self, f)
             except MDSplusException as e:
                 logging.warning(
-                    "An MDSplus exception occurred while executing '{}'. Exception was:\n{}".format(
-                        f, e
-                    )
+                    f"An MDSplus exception occurred while executing '{f}'. Exception was:\n{e}"
                 )
             except Exception as e:
                 logging.warning(
-                    "A non-MDSplus exception occurred while executing '{}'. Exception was:\n{}".format(
-                        f, e
-                    )
+                    f"A non-MDSplus exception occurred while executing '{f}'. Exception was:\n{e}"
                 )
 
         self.save(filepath)

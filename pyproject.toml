@@ -13,18 +13,19 @@ dynamic = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-  "numpy >= 1.22.0",
+  "numpy >= 1.24.0",
 ]
 [project.optional-dependencies]
 tests = [
-  "pytest >= 7.0.0",
-  "tox >= 4.3.1",
+  "pytest >= 8.0.0",
+  "nox >= 2024.4.15",
 ]
 
 [tool.codespell]
 skip = "*.png"
 ignore-words-list = """
-ned"""
+ned,
+tru"""
 
 [tool.ruff]
 target-version = "py39"
