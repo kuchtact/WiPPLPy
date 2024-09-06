@@ -5,9 +5,10 @@ ci:
 repos:
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
+  rev: v4.6.0
   hooks:
   - id: check-ast
+    name: check abstract syntax tree
   - id: check-merge-conflict
     exclude: .*\.rst
   - id: check-case-conflict
@@ -20,7 +21,7 @@ repos:
   - id: check-yaml
 
 - repo: https://github.com/sirosen/texthooks
-  rev: 0.5.0
+  rev: 0.6.6
   hooks:
   - id: fix-smartquotes
   - id: fix-spaces
@@ -28,15 +29,9 @@ repos:
   - id: forbid-bidi-controls
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks
-  rev: v1.5.4
+  rev: v1.5.5
   hooks:
   - id: remove-crlf
-
-- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.10.0
-  hooks:
-  - id: pretty-format-ini
-    args: [--autofix]
 
 - repo: https://github.com/MarcoGorelli/absolufy-imports
   rev: v0.3.1
@@ -53,21 +48,23 @@ repos:
   - id: text-unicode-replacement-char
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.6
+  rev: v2.3.0
   hooks:
   - id: codespell
-    args: [--write-changes]
+    args: [--write-changes, --uri-ignore-words-list=*]
     additional_dependencies:
     - tomli
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.0.292
+  rev: v0.4.8
   hooks:
   - id: ruff
+    name: ruff (see https://docs.astral.sh/ruff/rules)
     args: [--fix]
+  - id: ruff-format
 
 - repo: https://github.com/PyCQA/isort
-  rev: 5.12.0
+  rev: 5.13.2
   hooks:
   - id: isort
     name: isort
@@ -77,18 +74,18 @@ repos:
     types:
     - python
 
-- repo: https://github.com/psf/black
-  rev: 23.9.1
-  hooks:
-  - id: black
-
 - repo: https://github.com/asottile/blacken-docs
   rev: 1.16.0
   hooks:
   - id: blacken-docs
 
+- repo: https://github.com/sphinx-contrib/sphinx-lint
+  rev: v0.9.1
+  hooks:
+  - id: sphinx-lint
+
 - repo: https://github.com/nbQA-dev/nbQA
-  rev: 1.7.0
+  rev: 1.8.5
   hooks:
   - id: nbqa-check-ast
   - id: nbqa-ruff

@@ -1,4 +1,5 @@
 """Load a shot from an MDSplus tree using a local or remote connection."""
+
 import json
 import logging
 import os
@@ -34,30 +35,22 @@ def get_connector(server_name, reconnect=False):
             _mds_connection.closeAllTrees()
         except Exception as e:
             logging.debug(
-                "Tried to close all trees from old connection. Exception occurred but ignoring. Exception was:\n{}".format(
-                    e
-                )
+                f"Tried to close all trees from old connection. Exception occurred but ignoring. Exception was:\n{e}"
             )
 
     elif isinstance(_mds_connection, mds.Connection):
         if _mds_connection.hostspec == server_name:
             logging.info(
-                "Found pre-existing connector that is connected to {host}. Using this connector since same as {server}.".format(
-                    host=_mds_connection.hostspec, server=server_name
-                )
+                f"Found pre-existing connector that is connected to {_mds_connection.hostspec}. Using this connector since same as {server_name}."
             )
             return _mds_connection
         else:
             logging.info(
-                "Found pre-existing connector that is connected to {host}. This is not the same as {server} so making new connection.".format(
-                    host=_mds_connection.hostspec, server=server_name
-                )
+                f"Found pre-existing connector that is connected to {_mds_connection.hostspec}. This is not the same as {server_name} so making new connection."
             )
 
     logging.debug(
-        "Trying to make connection to {}. If this takes a while you may have forgotten to use the UW VPN.".format(
-            server_name
-        )
+        f"Trying to make connection to {server_name}. If this takes a while you may have forgotten to use the UW VPN."
     )
     _mds_connection = mds.Connection(server_name)
     logging.info(f"Connected to {server_name}.")
@@ -141,9 +134,7 @@ def get_remote_shot_tree(  # noqa: PLR0912
             connection.openTree(tree_name, shot_number)
         except MDSplusException:
             logging.exception(
-                "Error opening shot #{} on tree '{}' after retrying connection.".format(
-                    shot_number, tree_name
-                )
+                f"Error opening shot #{shot_number} on tree '{tree_name}' after retrying connection."
             )
             raise
     except MDSplusException:

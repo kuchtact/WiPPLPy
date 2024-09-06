@@ -13,7 +13,7 @@ on:
 
 jobs:
 
-  initial-tests:
+  tests:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
@@ -23,21 +23,30 @@ jobs:
       matrix:
         include:
 
-        - name: Python 3.11 (Linux)
+        - name: Tests, Python 3.9, Ubuntu
           os: ubuntu-latest
-          python: '3.11'
-          toxenv: py311
-          toxargs: --develop
+          python: '3.9'
+          nox_session: tests-3.9
 
-        - name: Python 3.10 (MacOS)
+        - name: Tests, Python 3.11, macOS
           os: macos-latest
-          python: '3.10'
-          toxenv: py310
+          python: '3.11'
+          nox_session: tests-3.11
 
-        - name: Python 3.9 (Windows)
+        - name: Tests, Python 3.10, Windows
           os: windows-latest
-          python: 3.9
-          toxenv: py39
+          python: '3.10'
+          nox_session: tests-3.10
+
+        - name: Tests, Python 3.10, macOS
+          os: macos-latest
+          python: '3.9'
+          nox_session: tests-3.9
+
+        - name: Documentation, Python 3.12, Ubuntu
+          os: ubuntu-latest
+          python: '3.12'
+          nox_session: docs
 
     steps:
 
@@ -53,13 +62,13 @@ jobs:
           cache: pip
 
       - name: Install Python dependencies
-        run: python -m pip install --progress-bar off --upgrade tox
+        run: python -m pip install --progress-bar off --upgrade nox uv
 
       - name: Run tests
-        run: tox ${{ matrix.toxargs }} -e ${{ matrix.toxenv }} -- ${{ matrix.toxposargs }}
+        run: nox -s ${{ matrix.nox_session }}
 
       - name: Upload coverage to codecov
-        if: ${{ contains(matrix.toxenv,'-cov') }}
+        if: ${{ contains(matrix.nox_session,'cov') }}
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage.xml

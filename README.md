@@ -1,1 +1,3 @@
-Look at this great README! What a wonderful first commit.
+# WiPPLPy
+
+Easily access data from plasma devices in the Wisconsin Plasma Physics Laboratory (WiPPL).
