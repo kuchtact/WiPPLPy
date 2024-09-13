@@ -25,8 +25,7 @@ tests = [
 skip = "*.png"
 ignore-words-list = """
 ned,
-tru,
-pard"""
+tru"""
 
 [tool.ruff]
 target-version = "py39"
