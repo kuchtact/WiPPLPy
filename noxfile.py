@@ -28,7 +28,16 @@ def install_environment(session, environment_path="mamba_environment.yml"):
 def tests(session):
     """Run tests with pytest."""
     install_environment(session)
-    session.run("pytest")
+
+    with_coverage: tuple[str, ...] = (
+        "--cov=wipplpy",
+        "--cov-report=xml",
+        "--cov-config=pyproject.toml",
+        "--cov-append",
+        "--cov-report",
+        "xml:coverage.xml",
+    )
+    session.run("pytest", *with_coverage)
 
 
 @nox.session(python=maxpython)
