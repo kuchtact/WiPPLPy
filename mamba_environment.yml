@@ -16,5 +16,6 @@ dependencies:
   - sphinx
   - pip
   - pip:
-    - pytest
     - nox
+    - pytest
+    - pytest-cov
