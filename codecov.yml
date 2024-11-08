@@ -1,5 +1,4 @@
 codecov:
-  token: e8274fcd-34c2-4777-a3c1-688a438292d6
   notify:
     wait_for_ci: false
   require_ci_to_pass: false
