@@ -71,7 +71,7 @@ jobs:
 
       - name: Upload coverage to codecov
         if: ${{ contains(matrix.nox_session,'cov') }}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
         env:
