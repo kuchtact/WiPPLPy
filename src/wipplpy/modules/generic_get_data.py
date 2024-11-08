@@ -406,11 +406,7 @@ class Data:
         return variable_vals
 
     def get(  # noqa: PLR0912, PLR0915
-        self,
-        get_call,
-        np_data_type=np.float64,
-        change_data=True,
-        load_from_saved=True,
+        self, get_call, np_data_type=np.float64, change_data=True, load_from_saved=True
     ):
         """
         Get data from the mdsplus tree and change it to the correct type using a get call.
@@ -425,6 +421,8 @@ class Data:
             Whether to change the data type of what MDSplus returns.
         load_from_saved : bool, default=True
             Whether to try to load the data from the saved calls.
+        return_node : bool, default = False
+            Whether to return the data node instead of returning the data itself. Used for gathering xarray.
 
         Returns
         -------
@@ -493,20 +491,21 @@ class Data:
                     try_loading = True
                     self.tree = get_remote_shot_tree(self.shot_number, reconnect=True)
 
+        # Might be good to put the rest of these checks into a separate function, so it can be called here and in the gather_data_array
         if self.ignore_errors:
             try:
-                data = node.data()
+                data = self.gather_data_array(node)
             except Exception:
                 return np.array()
         else:
-            data = node.data()
+            data = self.gather_data_array(node)
 
         logging.debug("Got data from tree.")
         if change_data:
             data = data.astype(np_data_type)
             logging.debug(f"Changed data to type '{np_data_type}'.")
 
-        # Only save calls if the dictionary exists. Th dictionary doesn't exist during some stages of initialization so that we don't save incorrect data.
+        # Only save calls if the dictionary exists. The dictionary doesn't exist during some stages of initialization so that we don't save incorrect data.
         if hasattr(self, "saved_calls"):
             # logging.debug("Adding data from get call with `save_name='{}'` into `saved_calls`.".format(save_name))
             if save_name in self.saved_calls:
@@ -517,14 +516,14 @@ class Data:
 
         return data
 
-    def gather_data_array(self, node, dimension_names, dimension_units):
+    def gather_data_array(self, mds_node, dimension_names=None, dimension_units=None):
         """
         Package data along with dimensions and attributes into an xarray DataArray. Pulls data from MDSPlus or local files.
 
         Parameters
         ----------
-        node : str
-            MDSPlus node for the chosen data.
+        mds_node : MDSPlus.node
+            mdsplus node to which desired data is attached
         dimension_names : list[str]
             list of human readable dimension names. Should be consistent with WiPPLPy conventions --insert a link here to some info about common WiPPLPy dimensions and conventions
         dimension_units : list[str]
@@ -537,11 +536,18 @@ class Data:
 
         """
         # get data first as numpy array
-        data = node.data()
+
+        data = mds_node.data()
         num_dimensions = data.ndim
+
+        if len(num_dimensions) != len(dimension_units):
+            raise Exception(
+                "*** Number of dimension names and number of dimension units does not match"
+            )
+
         if num_dimensions != len(dimension_names):
             raise Exception(
-                "Number of dimension names and number of data dimensions do not match"
+                "*** Number of dimension names and number of data dimensions does not match"
             )
 
         coords = {}
@@ -551,14 +557,17 @@ class Data:
             coords[dim_name] = data.dim_of(dim_num).data()
             dimension_units[dim_name] = dimension_units
 
-        # get coordinates arrays for dimensions that need it
+        coords["shot_num"] = mds_node.shot
 
         # get the rest of the attributes together into
-        {"units": dimension_units}
+        attributes = {"units": dimension_units, "call_string": "thing", "version": 1.0}
 
-        data_array = xr.DataArray(data, dims=dimension_names, coords=coords)
+        data_xarray = xr.DataArray(
+            data, dims=dimension_names, coords=coords, attrs=attributes
+        )
 
-        return data_array
+        self.xarray = data_xarray  # hmm which one
+        return data_xarray
 
     def to_raw_index(self, time_index):
         """
