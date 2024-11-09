@@ -28,10 +28,10 @@ jobs:
           python: '3.9'
           nox_session: tests-3.9
 
-        - name: Tests, Python 3.11, macOS
+        - name: Tests, Python 3.11, macOS, with code coverage
           os: macos-latest
           python: '3.11'
-          nox_session: tests-3.11
+          nox_session: tests-3.11(cov)
 
         - name: Tests, Python 3.10, macOS
           os: macos-latest
@@ -70,7 +70,7 @@ jobs:
         run: nox -s ${{ matrix.nox_session }}
 
       - name: Upload coverage to codecov
-        # if: ${{ contains(matrix.nox_session,'cov') }}
+        if: ${{ contains(matrix.nox_session,'cov') }}
         uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
