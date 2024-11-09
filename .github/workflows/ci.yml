@@ -28,7 +28,7 @@ jobs:
           python: '3.9'
           nox_session: tests-3.9
 
-        - name: Tests, Python 3.11, macOS, with code coverage
+        - name: Tests, Python 3.11, with code coverage, macOS
           os: macos-latest
           python: '3.11'
           nox_session: tests-3.11(cov)
