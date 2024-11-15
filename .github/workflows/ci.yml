@@ -67,7 +67,7 @@ jobs:
         run: python -m pip install --progress-bar off --upgrade nox
 
       - name: Run tests
-        run: nox -s ${{ matrix.nox_session }}
+        run: nox -s '${{ matrix.nox_session }}'
 
       - name: Upload coverage to codecov
         if: ${{ contains(matrix.nox_session,'cov') }}
