@@ -15,6 +15,7 @@ def install_environment(session, environment_path="mamba_environment.yml"):
             session.venv_backend,
             "env",
             "update",
+            "--verbose",
             "--prefix",
             session.virtualenv.location,
             "--file",
