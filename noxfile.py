@@ -26,7 +26,6 @@ def install_environment(session, environment_path="mamba_environment.yml"):
 
 test_specifiers: list = [
     nox.param("run all tests", id="all"),
-    nox.param("skip slow tests", id="skipslow"),
     nox.param("with code coverage", id="cov"),
 ]
 
