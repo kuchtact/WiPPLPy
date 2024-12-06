@@ -180,21 +180,12 @@ then we need to create an environment for running the code in.
       In Windows, the directory path will be :file:`C:\\Users\\<username>\\repos\\WiPPLPy`.
 
 #. Create a Mamba_ environment using the packages from
-   :file:`mamba_environment.yml`. If you are on a Windows computer (even if you
-   are using WSL) or Mac computer that doesn't use the silicon processor you
-   can do so by running:
+   :file:`mamba_environment.yml`. If you are on Windows, Linux, or macOS that
+   doesn't use the silicon processor you can do so by running:
 
    .. code-block:: bash
 
       mamba env create -f ./mamba_environment.yml
-
-   If you are on a Linux computer then you need to install MDSplus separately by running:
-
-   .. code-block:: bash
-
-      mamba env create -f ./mamba_environment_linux.yml
-      mamba activate WiPPLPy
-      mamba install mdsplus
 
    If you are on a computer that uses the Mac silicon processor you can do so by
 
