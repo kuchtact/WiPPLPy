@@ -6,7 +6,7 @@ channels:
 dependencies:
   - python
   - jupyter
-  - numpy
+  - numpy < 2
   - scipy
   - matplotlib
   - mdsplus
