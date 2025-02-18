@@ -23,6 +23,14 @@ def install_environment(session, environment_path="mamba_environment.yml"):
         ],
         silent=False,
     )
+    session.run(
+        *[
+            session.venv_backend,
+            "list",
+            "--prefix",
+            session.virtualenv.location,
+        ]
+    )
 
 
 test_specifiers: list = [
