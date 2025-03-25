@@ -313,6 +313,7 @@ class Data:
         index : int
             Data index from start of digitizer recording.
         """
+
         try:
             times = self.time
         except AttributeError:
@@ -542,7 +543,7 @@ class Data:
         data = mds_node.data()
         num_dimensions = data.ndim
 
-        if len(num_dimensions) != len(dimension_units):
+        if num_dimensions != len(dimension_units):
             raise Exception(
                 "*** Number of dimension names and number of dimension units does not match"
             )
