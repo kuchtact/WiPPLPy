@@ -38,9 +38,9 @@ jobs:
           python: '3.9'
           nox_session: tests-3.9
 
-        - name: Documentation, Python 3.12, Ubuntu
+        - name: Documentation, Python 3.11, Ubuntu
           os: ubuntu-latest
-          python: '3.12'
+          python: '3.11'
           nox_session: docs
 
     steps:
