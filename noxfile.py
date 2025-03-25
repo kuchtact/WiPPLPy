@@ -23,13 +23,42 @@ def install_environment(session, environment_path="mamba_environment.yml"):
         ],
         silent=False,
     )
+    session.run(
+        *[
+            session.venv_backend,
+            "list",
+            "--prefix",
+            session.virtualenv.location,
+        ]
+    )
+
+
+test_specifiers: list = [
+    nox.param("run all tests", id="all"),
+    nox.param("with code coverage", id="cov"),
+]
+
+with_coverage: tuple[str, ...] = (
+    "--cov=wipplpy",
+    "--cov-report=xml",
+    "--cov-config=pyproject.toml",
+    "--cov-append",
+    "--cov-report",
+    "xml:coverage.xml",
+)
 
 
 @nox.session(python=supported_python_versions)
-def tests(session):
+@nox.parametrize("test_specifier", test_specifiers)
+def tests(session, test_specifier):
     """Run tests with pytest."""
     install_environment(session)
-    session.run("pytest")
+
+    options = []
+    if test_specifier == "with code coverage":
+        options += with_coverage
+
+    session.run("pytest", *options)
 
 
 @nox.session(python=maxpython)
