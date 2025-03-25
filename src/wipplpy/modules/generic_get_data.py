@@ -206,7 +206,9 @@ class Data:
         try:
             self.shot_number = int(tree)
         except ValueError:
-            self.shot_number = tree.shot_number
+            self.shot_number = tree.shot
+        except TypeError:
+            self.shot_number = tree.shot
 
         self.ignore_errors = ignore_errors
         self.silence_error_logging = silence_error_logging
