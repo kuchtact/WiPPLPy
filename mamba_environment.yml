@@ -6,7 +6,7 @@ channels:
 dependencies:
   - python
   - jupyter
-  - numpy
+  - numpy < 2
   - scipy
   - matplotlib
   - mdsplus
@@ -16,5 +16,6 @@ dependencies:
   - sphinx
   - pip
   - pip:
-    - pytest
     - nox
+    - pytest
+    - pytest-cov
