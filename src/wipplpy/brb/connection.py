@@ -2,11 +2,11 @@
 Create objects pertaining to accessing databases for the BRB device.
 """
 
-from WiPPLPy.modules.config_reader import MDSplusConfigReader
-from WiPPLPy.modules.connection import MDSPlusConnection
+from wipplpy.modules.config_reader import MDSplusConfigReader
+from wipplpy.modules.connection import MDSplusConnection
 
 
-class BRBConnection(MDSPlusConnection):
+class BRBConnection(MDSplusConnection):
     """
     Open the BRB-MDSplus database for a given shot number.
     """
@@ -35,5 +35,5 @@ class BRBConnection(MDSPlusConnection):
         self._local_and_remote_connection(
             shot_number,
             self.config_reader.BRB_tree,
-            self.config_reader.BRB_remote_server,
+            self.config_reader.BRB_remote_server
         )
